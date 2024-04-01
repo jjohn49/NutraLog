@@ -133,7 +133,7 @@ const FoodSchema = mongoose.Schema({
         }
       }
     }
-  })
+  });
 
   const Food = mongoose.model("Food",FoodSchema);
 
