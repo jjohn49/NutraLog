@@ -1,20 +1,15 @@
-const axios = require("axios");
+import axios, { AxiosResponse } from "axios";
 
-const { Food } = require("../models/food");
+import { Food } from "../models/food";
 
 const API_KEY = "fqb4Fojb2agvj6XQOiYX86LtYJPvqXCYlAv4oTsa";
 
-async function getFood(foodID){
+export async function getFood(foodID: String){
     var food;
     await axios.get("https://api.nal.usda.gov/fdc/v1/food/" + foodID + "?api_key=fqb4Fojb2agvj6XQOiYX86LtYJPvqXCYlAv4oTsa")
-    .then((res)=>{
+    .then((res: AxiosResponse)=>{
         food = new Food(res.data)
     });
 
     return food;
-}
-
-
-module.exports = {
-    getFood
 }

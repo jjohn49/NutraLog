@@ -2,8 +2,9 @@
   "name": "nutralog_backend",
   "version": "1.0.0",
   "description": "backend for nutralog",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
+    "dev":"nodemon index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,5 +16,14 @@
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.4",
     "mongoose-unique-validator": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.2",
+    "@typescript-eslint/parser": "^7.5.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.3"
   }
 }

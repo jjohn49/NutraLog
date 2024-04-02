@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema } from "mongoose";
 
-const FoodSchema = mongoose.Schema({
+const FoodSchema: Schema = new mongoose.Schema({
     "discontinuedDate": {
       "type": "String"
     },
@@ -135,6 +135,4 @@ const FoodSchema = mongoose.Schema({
     }
   });
 
-  const Food = mongoose.model("Food",FoodSchema);
-
-  module.exports = Food;
+  export const Food = mongoose.model("Food",FoodSchema);

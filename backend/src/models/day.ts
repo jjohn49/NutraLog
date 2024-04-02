@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
 const app = express();
-const mongoose = require("mongoose")
+import mongoose, { Document, Model, Schema } from "mongoose";
 app.use(express.json())
 
 
-const DaySchema = mongoose.Schema({
+const DaySchema: Schema = new mongoose.Schema({
     date: Date,
     userID: {type: mongoose.Schema.ObjectId, ref: "User"},
     calorieGoal:Number,
@@ -16,8 +16,8 @@ const DaySchema = mongoose.Schema({
     ]
 })
 
-const Day = mongoose.model("Day",DaySchema);
+export const Day = mongoose.model("Day",DaySchema);
 
-module.exports = Day;
+
 
 
