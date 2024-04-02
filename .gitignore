@@ -90,3 +90,4 @@ fastlane/test_output
 iOSInjectionProject/
 /backend/node_modules
 /node_modules
+backend/.env
