@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("user")
 class UserController(@Autowired val repo: UserRepository) {
+
+
     @PostMapping("add")
     fun addUser(@RequestBody user: User): Any{
         repo.insert(user)

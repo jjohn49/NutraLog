@@ -9,11 +9,8 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference
 data class User(
     @Id
     val id: ObjectId = ObjectId(),
-    val userGoals: UserGoals,
-
-    @DocumentReference(lazy = true)
-    val currentDay: Day
-
+    val userGoals: UserGoals?,
+    val days: ArrayList<ObjectId> = arrayListOf()
 )
 data class UserGoals(
     val calories: Int,

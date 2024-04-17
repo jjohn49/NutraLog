@@ -1,5 +1,6 @@
 package nutra.log.backend.models
 
+import com.mongodb.DBRef
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.ReadOnlyProperty
@@ -13,19 +14,16 @@ data class Day(
     @Id
     val id: ObjectId = ObjectId(),
 
-    @DocumentReference(lazy = true)
-    @ReadOnlyProperty
-    val user: User,
+    val userId: ObjectId,
 
     val date: Date = Date(),
 
     val foodsEaten: List<FoodServing> = listOf()
+){
+    constructor(userId:String): this(userId = ObjectId(userId))
+}
 
-)
-
-@Document("food-serving")
 data class FoodServing(
-    @DocumentReference(lazy = true)
-    val food: Food,
+    val foodId: ObjectId,
     val numberOfServings: Float
 )
