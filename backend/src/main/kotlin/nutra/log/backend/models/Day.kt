@@ -18,12 +18,9 @@ data class Day(
 
     val date: Date = Date(),
 
-    val foodsEaten: List<FoodServing> = listOf()
+    val foodsEaten: ArrayList<FoodServing> = arrayListOf()
 ){
     constructor(userId:String): this(userId = ObjectId(userId))
 }
 
-data class FoodServing(
-    val foodId: ObjectId,
-    val numberOfServings: Float
-)
+

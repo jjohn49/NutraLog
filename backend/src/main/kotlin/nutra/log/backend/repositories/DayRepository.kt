@@ -5,4 +5,6 @@ import nutra.log.backend.models.User
 import org.springframework.data.mongodb.repository.MongoRepository
 
 interface DayRepository : MongoRepository<Day, String> {
+
+    fun findAllByUserId(userId: String): List<Day>
 }

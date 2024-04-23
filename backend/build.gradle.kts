@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
+    kotlin("plugin.serialization") version "1.4.21"
 }
 
 group = "nutra.log"
@@ -25,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 }
 
 tasks.withType<KotlinCompile> {

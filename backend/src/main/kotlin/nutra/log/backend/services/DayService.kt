@@ -1,16 +1,18 @@
 package nutra.log.backend.services
 
-import nutra.log.backend.models.Day
-import nutra.log.backend.models.User
+import nutra.log.backend.models.*
 import nutra.log.backend.repositories.DayRepository
+import nutra.log.backend.repositories.FoodRepository
 import nutra.log.backend.repositories.UserRepository
+import nutra.log.backend.requests.AddFootToDayRequest
+import nutra.log.backend.requests.DayRequest
+
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.update
+import org.springframework.data.domain.Example
 import org.springframework.stereotype.Service
 
 @Service
-class DayService(@Autowired val dayRepo: DayRepository, @Autowired val userRepo: UserRepository) {
+class DayService(@Autowired val dayRepo: DayRepository, @Autowired val userRepo: UserRepository, @Autowired val openFoodFactsService: OpenFoodFactsService, @Autowired val foodRepository: FoodRepository) {
 
     fun addDay(day: Day){
         dayRepo.insert(day)
@@ -24,6 +26,50 @@ class DayService(@Autowired val dayRepo: DayRepository, @Autowired val userRepo:
         }else{
             println("User with the object id of ${day.userId.toString()} was not found")
         }
+    }
+    fun getFoodByCode(code: String): OpenFoodFact{
+        return openFoodFactsService.getFoodByCode(code)
+    }
+    fun getFoodBySearch(food: String): OpenFoodFactSearch{
+        return openFoodFactsService.getFoodBySearch(food)
+    }
+    fun addFoodToDay(req : AddFootToDayRequest): Day?{
+        val day = dayRepo.findById(req.dayId)
 
+        if (day.isPresent && req.userId == day.get().userId.toString()){
+            val d = day.get()
+
+            val food = req.food.toFood()
+            foodRepository.insert(food)
+            d.foodsEaten.add(FoodServing(food.id, req.servings))
+            dayRepo.save(d)
+
+            return d
+        }
+        return null
+    }
+    fun getAllFoodServings(day: Day): List<Pair<Double,Food>>{
+        val ret = arrayListOf<Pair<Double,Food>>()
+        for(i in day.foodsEaten){
+            val temp = foodRepository.findById(i.foodId.toString())
+
+            temp.ifPresent {
+                ret.add(Pair(i.numberOfServings,it))
+            }
+        }
+
+        return ret
+    }
+
+    fun deleteFoodFromDay(food: FoodServing, dayId: String){
+        val day = dayRepo.findById(dayId)
+
+        day.ifPresent {
+            it.foodsEaten.remove(food)
+        }
+    }
+
+    fun getAllDays(req: DayRequest): List<Day>{
+        return dayRepo.findAllByUserId(req.userId)
     }
 }

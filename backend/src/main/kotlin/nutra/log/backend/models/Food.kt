@@ -12,12 +12,12 @@ data class Food(
     val id: ObjectId,
     val name: String,
     val servingSize: String,
-    val calories: Int,
+    val calories: Double?,
 
     //would name this gramsOf**** but its easier to id this way
-    val proteinGrams:Int,
-    val carbGrams:Int,
-    val fatGrams:Int,
+    val proteinGrams:Double?,
+    val carbGrams:Double?,
+    val fatGrams:Double?,
 
     //Leave all Optionals at the End
     val brand: String = ""
