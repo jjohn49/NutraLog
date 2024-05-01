@@ -8,8 +8,10 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference
 @Document("user")
 data class User(
     @Id
-    val id: ObjectId = ObjectId(),
-    val userGoals: UserGoal?,
+    val id: String,
+    val email:String,
+    val password:String,
+    val userGoals: UserGoal? = null,
     val days: ArrayList<ObjectId> = arrayListOf()
 )
 
