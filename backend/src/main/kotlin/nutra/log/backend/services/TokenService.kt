@@ -32,7 +32,7 @@ class TokenService(
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
     }
 
-    fun parseToken(token: String): Optional<User> {
+    fun parseToken(token: String): User {
         val jwt = jwtDecoder.decode(token)
         val userId = jwt.claims["userId"] as String
         return userService.findById(userId)

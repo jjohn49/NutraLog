@@ -13,10 +13,12 @@ import org.bson.json.JsonObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -27,9 +29,9 @@ class UserController(@Autowired val repo: UserRepository) {
     @Autowired
     private lateinit var tokenService: TokenService
     @GetMapping("get")
-    fun getUser(authorization: Authorization):ResponseEntity<*>{
-
-        return ResponseEntity.ok<Any>(UserResponse(true, null, ""))
+    fun getUser(authentication: Authentication):ResponseEntity<*>{
+        
+        return ResponseEntity.ok<Any>(UserResponse(true, null, "Hello"))
     }
 
 }

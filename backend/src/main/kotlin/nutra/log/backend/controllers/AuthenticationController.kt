@@ -5,6 +5,7 @@ import nutra.log.backend.requests.LogInRequest
 import nutra.log.backend.requests.RegisterUserRequest
 import nutra.log.backend.responses.BackendResponse
 import nutra.log.backend.responses.SuccessfulLoginResponse
+import nutra.log.backend.services.AuthenticationService
 import nutra.log.backend.services.TokenService
 import nutra.log.backend.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,6 +30,9 @@ class AuthenticationController {
     @Autowired
     private lateinit var tokenService: TokenService
 
+    @Autowired
+    private lateinit var authenticationService: AuthenticationService
+
     @PostMapping("signup")
     fun registerUser(@RequestBody registerUserRequest: RegisterUserRequest): ResponseEntity<*>{
         val hashedPassword = passwordEncoder.encode(registerUserRequest.password)
@@ -42,17 +46,7 @@ class AuthenticationController {
 
     @PostMapping("login")
     fun authenticateUser(@RequestBody logInRequest: LogInRequest):ResponseEntity<*>{
-
-        val user = userService.findById(logInRequest.username)
-
-        if(user.isPresent){
-            if(!passwordEncoder.matches(logInRequest.password,user.get().password)){
-                return ResponseEntity.badRequest().body(BackendResponse(false,"Wrong Username or Password"))
-            }
-        }else{
-            return ResponseEntity.badRequest().body(BackendResponse(false,"Wrong Username or Password"))
-        }
-
-        return ResponseEntity.ok(SuccessfulLoginResponse(tokenService.createToken(user.get())))
+        val token = authenticationService.authenticate(logInRequest)
+        return ResponseEntity.ok(SuccessfulLoginResponse(token))
     }
 }

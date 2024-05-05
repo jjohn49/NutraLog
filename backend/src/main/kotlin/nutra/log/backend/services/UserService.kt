@@ -9,8 +9,8 @@ import java.util.Optional
 @Service
 class UserService(@Autowired val repo: UserRepository, @Autowired val dayService: DayService) {
 
-    fun findById(userId:String): Optional<User>{
-        return repo.findById(userId)
+    fun findById(userId:String): User{
+        return repo.findById(userId).orElseThrow()
     }
     fun addUser(user: User){
         repo.insert(user)
