@@ -6,13 +6,18 @@ import nutra.log.backend.repositories.FoodRepository
 import nutra.log.backend.repositories.UserRepository
 import nutra.log.backend.requests.AddFootToDayRequest
 import nutra.log.backend.requests.DayRequest
+import org.bson.types.ObjectId
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
 class DayService(@Autowired val dayRepo: DayRepository, @Autowired val userRepo: UserRepository, @Autowired val openFoodFactsService: OpenFoodFactsService, @Autowired val foodRepository: FoodRepository) {
+
+    @Autowired
+    private lateinit var userService: UserService
 
     fun addDay(day: Day){
         dayRepo.insert(day)
@@ -33,20 +38,19 @@ class DayService(@Autowired val dayRepo: DayRepository, @Autowired val userRepo:
     fun getFoodBySearch(food: String): OpenFoodFactSearch{
         return openFoodFactsService.getFoodBySearch(food)
     }
-    fun addFoodToDay(req : AddFootToDayRequest): Day?{
-        val day = dayRepo.findById(req.dayId)
+    fun addFoodToDay(authentication: Authentication, req : AddFootToDayRequest): Day?{
+        val day = dayRepo.findDayByDateAndId(req.date, ObjectId(authentication.name))
 
-        if (day.isPresent && req.userId == day.get().userId.toString()){
-            val d = day.get()
+        val food = req.food.toFood()
+        foodRepository.insert(food)
+        day.foodsEaten.add(FoodServing(food.id, req.servings))
+        dayRepo.save(day)
 
-            val food = req.food.toFood()
-            foodRepository.insert(food)
-            d.foodsEaten.add(FoodServing(food.id, req.servings))
-            dayRepo.save(d)
+        userService.addDayToUser(authentication.name,day.id)
 
-            return d
-        }
-        return null
+        return day
+
+
     }
     fun getAllFoodServings(day: Day): List<Pair<Double,Food>>{
         val ret = arrayListOf<Pair<Double,Food>>()
@@ -70,6 +74,6 @@ class DayService(@Autowired val dayRepo: DayRepository, @Autowired val userRepo:
     }
 
     fun getAllDays(req: DayRequest): List<Day>{
-        return dayRepo.findAllByUserId(req.userId)
+        return dayRepo.findAllByUserId(ObjectId(req.userId))
     }
 }

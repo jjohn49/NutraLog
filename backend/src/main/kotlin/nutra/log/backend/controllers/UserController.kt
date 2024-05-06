@@ -8,6 +8,7 @@ import nutra.log.backend.requests.UserRequest
 import nutra.log.backend.responses.BackendResponse
 import nutra.log.backend.responses.UserResponse
 import nutra.log.backend.services.TokenService
+import nutra.log.backend.services.UserService
 import org.apache.tomcat.util.http.parser.Authorization
 import org.bson.json.JsonObject
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,14 +25,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("user")
-class UserController(@Autowired val repo: UserRepository) {
+class UserController {
 
     @Autowired
-    private lateinit var tokenService: TokenService
+    private lateinit var userService: UserService
+
     @GetMapping("get")
     fun getUser(authentication: Authentication):ResponseEntity<*>{
-        
-        return ResponseEntity.ok<Any>(UserResponse(true, null, "Hello"))
+
+        val user = userService.findById(authentication.name)
+        return ResponseEntity.ok<Any>(UserResponse(true, user, "Successfully Authenticated User"))
     }
 
 }

@@ -35,9 +35,11 @@ data class OpenFoodFactSearch(
     data class SearchProduct(
         val code: String? = null,
         val _id: String,
-        val product_name: String? = null,
+        val product_name: String = "",
         val nutriments: Nutriments
-    )
+    ){
+        fun toFood(): Food = Food(ObjectId(_id),product_name,"",nutriments.energy_kcal,nutriments.proteins,nutriments.carbohydrates,nutriments.fat)
+    }
 }
 
 

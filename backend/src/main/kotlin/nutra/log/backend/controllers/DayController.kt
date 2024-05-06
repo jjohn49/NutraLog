@@ -6,7 +6,10 @@ import nutra.log.backend.repositories.DayRepository
 import nutra.log.backend.requests.DayRequest
 import nutra.log.backend.requests.AddFootToDayRequest
 import nutra.log.backend.services.DayService
+import nutra.log.backend.services.UserService
+import org.apache.tomcat.util.http.parser.Authorization
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -28,6 +31,11 @@ class DayController(@Autowired val repo: DayRepository, @Autowired val service: 
     fun addFood(@RequestBody req: AddFootToDayRequest): Food{
         service.addFoodToDay(req)
         return req.food.toFood()
+    }
+
+    @PutMapping("add/food/today")
+    fun addFoodToday(authentication: Authentication, @RequestBody req:AddFootToDayRequest): Food{
+
     }
 
     @PostMapping("get/all")

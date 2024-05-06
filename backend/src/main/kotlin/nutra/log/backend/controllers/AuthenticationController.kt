@@ -22,31 +22,15 @@ import org.springframework.web.bind.annotation.RestController
 class AuthenticationController {
 
     @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
-
-    @Autowired
-    private lateinit var userService: UserService
-
-    @Autowired
-    private lateinit var tokenService: TokenService
-
-    @Autowired
     private lateinit var authenticationService: AuthenticationService
 
     @PostMapping("signup")
     fun registerUser(@RequestBody registerUserRequest: RegisterUserRequest): ResponseEntity<*>{
-        val hashedPassword = passwordEncoder.encode(registerUserRequest.password)
-
-        val newUser = User(registerUserRequest.id, email = registerUserRequest.email, password = hashedPassword)
-
-        newUser.let { userService.addUser(user = newUser) }
-
-        return ResponseEntity.ok<Any>(BackendResponse(true,"Created New User For Email: ${registerUserRequest.email}"))
+        return authenticationService.registerNewUser(registerUserRequest)
     }
 
     @PostMapping("login")
     fun authenticateUser(@RequestBody logInRequest: LogInRequest):ResponseEntity<*>{
-        val token = authenticationService.authenticate(logInRequest)
-        return ResponseEntity.ok(SuccessfulLoginResponse(token))
+        return authenticationService.authenticate(logInRequest)
     }
 }
