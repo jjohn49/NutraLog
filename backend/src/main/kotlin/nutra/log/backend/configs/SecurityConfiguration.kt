@@ -47,6 +47,7 @@ class SecurityConfig {
             this.authorizeHttpRequests {
                 this.authorize("/auth/**",permitAll)
                 this.authorize("/hello",permitAll)
+                this.authorize("/open-food/**",permitAll)
                 this.authorize("/**", authenticated)
             }
         }

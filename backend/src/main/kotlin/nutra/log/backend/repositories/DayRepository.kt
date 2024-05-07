@@ -8,9 +8,11 @@ import java.util.*
 
 interface DayRepository : MongoRepository<Day, String> {
 
-    fun findAllByUserId(userId: ObjectId): List<Day>
+    fun findAllByUserId(userId: String): List<Day>
 
     fun findDayByDate(date: Date): Day
+
+    fun findDayByDateAndUserId(date: Date, userId: String): Day
 
     fun findDayByDateAndId(date: Date, id: ObjectId): Day
 }

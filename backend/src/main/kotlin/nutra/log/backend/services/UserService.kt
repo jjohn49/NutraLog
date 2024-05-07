@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import java.util.Optional
 
 @Service
-class UserService(@Autowired val repo: UserRepository, @Autowired val dayService: DayService) {
+class UserService(@Autowired val repo: UserRepository) {
 
     fun findById(userId:String): User{
         return repo.findById(userId).orElseThrow()

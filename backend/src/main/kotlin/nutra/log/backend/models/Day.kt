@@ -14,13 +14,11 @@ data class Day(
     @Id
     val id: ObjectId = ObjectId(),
 
-    val userId: ObjectId,
+    val userId: String,
 
     val date: Date = Date(),
 
     val foodsEaten: ArrayList<FoodServing> = arrayListOf()
-){
-    constructor(userId:String): this(userId = ObjectId(userId))
-}
+)
 
 

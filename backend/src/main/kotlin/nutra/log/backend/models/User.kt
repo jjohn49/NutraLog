@@ -11,7 +11,7 @@ data class User(
     val id: String,
     val email:String,
     val password:String,
-    val userGoals: UserGoal? = null,
+    var userGoals: UserGoal? = null,
     val days: ArrayList<ObjectId> = arrayListOf()
 )
 
