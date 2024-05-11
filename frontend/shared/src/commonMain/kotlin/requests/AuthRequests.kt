@@ -2,40 +2,28 @@ package requests
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import response.LogInResponse
 import response.RegisterResponse
 
+@Serializable
 data class RegisterUserRequest(
     val id: String,
     val email: String,
     val password: String
-): GenericRequest{
-    override suspend fun makeRequest(): RegisterResponse {
-        val uri: String = "http://localhost:8080/auth/signup"
-        val response = client.post(uri){
-            setBody(this)
-        }
-        println(response)
-        val ret = RegisterResponse(true,response.bodyAsText(),"Finished", this)
-        return ret
-    }
-}
+)
 
+@Serializable
 data class LogInRequest(
     val username:String,
     val password: String
-): GenericRequest {
-    override suspend fun makeRequest(): LogInResponse {
-        val uri: String = "http://localhost:8080/auth/login"
-        val response = client.post(uri){
-            setBody(this)
-        }
-        println(response)
-        val ret = LogInResponse(true,response.body(),"Logged In", this)
-        return ret
-    }
-}
+)

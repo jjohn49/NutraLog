@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    kotlin("plugin.serialization") version "1.9.23"
+
 }
 
 kotlin {
@@ -23,11 +25,17 @@ kotlin {
             isStatic = true
         }
     }
+
+    val ktorVersion = libs.versions.ktor.get()
     
     sourceSets {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
             implementation(libs.ktor.client.core)
+            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
         }
 
         androidMain.dependencies {
