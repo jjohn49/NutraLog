@@ -13,17 +13,24 @@ import Shared
 struct HomePageView: View {
     
     @EnvironmentObject var user: User
+    @State var loading: Bool = false
     
     var body: some View {
         
-        if(user.token == ""){
-            LoginView().environmentObject(self.user)
+        if(user.token == "" && user.username == ""){
+            if(loading){
+                LoadingView()
+            }else{
+                LoginView(loading: $loading).environmentObject(self.user)
+            }
         }else{
-            Text("Logged In")
+            VStack{
+                Text("Logged in \(user.username)")
+            }
         }
     }
 }
 
 #Preview {
-    HomePageView()
+    return HomePageView().environmentObject(User())
 }

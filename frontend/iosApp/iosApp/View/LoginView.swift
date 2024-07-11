@@ -17,6 +17,8 @@ struct LoginView: View {
     
     @State var failedLogin: Bool = false
     
+    @Binding var loading: Bool
+    
     var body: some View {
         
         VStack {
@@ -51,25 +53,7 @@ struct LoginView: View {
             
             Button(
                 action: {
-                    Task{
-                        try await viewModel.login()
-
-                        if let response = viewModel.response{
-                            if(response.success){
-                                user.token = response.body.token
-                                let userResponse = try await viewModel.getUser(token: user.token)
-                                
-                                print(userResponse)
-                                
-                                user.username = userResponse.user!.id
-                                user.goals = userResponse.user!.userGoals
-                                user.days = userResponse.user!.days as! Array<Day>
-                                
-                            }else{
-                                failedLogin = true
-                            }
-                        }
-                    }
+                    logInButtonAction()
                 },
                 label: {
                     Text("Login.LoginButton.Title")
@@ -82,6 +66,29 @@ struct LoginView: View {
             )
         }
         .padding(30)
+    }
+    
+    func logInButtonAction() {
+        loading = true
+        Task{
+            try await viewModel.login()
+
+            if let response = viewModel.response{
+                if(response.success){
+                    user.token = response.body.token
+                    let userResponse = try await viewModel.getUser(token: user.token)
+                    print(userResponse)
+                    user.username = userResponse.user!.id
+                    user.goals = userResponse.user!.userGoals
+                    user.days = userResponse.user!.days as! Array<Day>
+                    loading = false
+                    
+                }else{
+                    failedLogin = true
+                    loading = false
+                }
+            }
+        }
     }
 }
 
@@ -103,6 +110,12 @@ class LoginViewModel: ObservableObject {
         return try await userUtil.getUser(token: token)
     }
     
+}
+
+#Preview {
+    @State var b = false
+    
+    return LoginView(loading: $b).environmentObject(User())
 }
 
 
