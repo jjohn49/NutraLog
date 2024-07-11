@@ -2,10 +2,11 @@ import SwiftUI
 import Shared
 
 struct ContentView: View {
-
+    
+    @EnvironmentObject var user: User
     
     var body: some View {
-        LoginView()
+        HomePageView().environmentObject(self.user)
     }
 }
 

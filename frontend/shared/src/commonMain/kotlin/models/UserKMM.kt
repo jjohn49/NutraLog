@@ -1,6 +1,6 @@
 package models
 
-data class User(
+data class UserKMM(
     val id: String,
     val email:String,
     val password:String,

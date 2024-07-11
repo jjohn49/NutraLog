@@ -10,7 +10,7 @@ import Foundation
 import Shared
 
 class User: ObservableObject{
-    @Published var username: String = ""
+    @Published var username: String = "JJ"
     @Published var token :String = ""
     @Published var goals: UserGoal? = nil
     @Published var days: Array<Day> = []

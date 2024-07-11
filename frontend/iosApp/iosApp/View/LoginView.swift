@@ -10,18 +10,26 @@ import SwiftUI
 import Shared
 
 struct LoginView: View {
+    
+    @EnvironmentObject var user: User
+    
+    @ObservedObject var viewModel: LoginViewModel = LoginViewModel()
+    
+    @State var failedLogin: Bool = false
+    
     var body: some View {
         
-        @ObservedObject var viewModel: LoginViewModel = LoginViewModel()
-        
-    
         VStack {
+            
+            if failedLogin {
+                Text("Incorrect Username or Password.  try Again").bold().background(.red)
+            }
             
             Spacer()
             
             VStack {
                 TextField(
-                    "Login.UsernameField.Title",
+                    "user.username",
                     text: $viewModel.username
                 )
                 .autocapitalization(.none)
@@ -45,6 +53,14 @@ struct LoginView: View {
                 action: {
                     Task{
                         try await viewModel.login()
+
+                        if let response = viewModel.response{
+                            if(response.success){
+                                user.token = response.body.token
+                            }else{
+                                failedLogin = true
+                            }
+                        }
                     }
                 },
                 label: {
@@ -70,6 +86,7 @@ class LoginViewModel: ObservableObject {
     @Published var response: LogInResponse?
     
     func login() async throws {
+        //print("Sending to Backend")
         response = try await util.sendLoginRequest(req: LogInRequest(username: username, password: password))
     }
     
