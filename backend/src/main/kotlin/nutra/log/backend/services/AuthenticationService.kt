@@ -5,6 +5,8 @@ import nutra.log.backend.models.User
 import nutra.log.backend.requests.LogInRequest
 import nutra.log.backend.requests.RegisterUserRequest
 import nutra.log.backend.responses.BackendResponse
+import nutra.log.backend.responses.LogInBody
+import nutra.log.backend.responses.LogInResponse
 import nutra.log.backend.responses.SuccessfulLoginResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.RequestEntity
@@ -33,17 +35,22 @@ class AuthenticationService {
     private lateinit var authenticationManager: AuthenticationManager
 
     fun authenticate(logInRequest: LogInRequest): ResponseEntity<*>{
-        authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                logInRequest.username,
-                logInRequest.password
+
+        try {
+            authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    logInRequest.username,
+                    logInRequest.password
+                )
             )
-        )
 
-        val user = userDetailService.loadUserByUsername(logInRequest.username)
-        val accessToken = tokenService.createToken(userService.findById(logInRequest.username))
+            val user = userService.findById(logInRequest.username)
+            val accessToken = tokenService.createToken(userService.findById(logInRequest.username))
+            return ResponseEntity.ok(LogInResponse(true, LogInBody(accessToken),"Successful Login.", logInRequest))
+        }catch (e: Exception){
+            return ResponseEntity.ok(LogInResponse(false,LogInBody(""),"Failed Login.", logInRequest))
+        }
 
-        return ResponseEntity.ok(SuccessfulLoginResponse(accessToken))
     }
 
     fun registerNewUser(registerUserRequest: RegisterUserRequest) : ResponseEntity<*>{

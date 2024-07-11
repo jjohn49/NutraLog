@@ -2,6 +2,7 @@ package response
 
 import io.ktor.http.content.NullBody
 import kotlinx.serialization.Serializable
+import models.UserKMM
 import requests.LogInRequest
 import requests.RegisterUserRequest
 
@@ -16,13 +17,14 @@ data class RegisterResponse(
 @Serializable
 data class LogInResponse(
     override val success: Boolean,
-    override val body: SuccessfulLoginResponse,
+    override val body: LogInBody,
     override val message: String,
     override val request: LogInRequest,
 ): GenericResponse<LogInRequest>
 
 @Serializable
-data class SuccessfulLoginResponse(
-    val token: String
+data class LogInBody(
+    val token: String,
+    //val user: UserKMM? = null,
 )
 

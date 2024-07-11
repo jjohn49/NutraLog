@@ -57,6 +57,14 @@ struct LoginView: View {
                         if let response = viewModel.response{
                             if(response.success){
                                 user.token = response.body.token
+                                let userResponse = try await viewModel.getUser(token: user.token)
+                                
+                                print(userResponse)
+                                
+                                user.username = userResponse.user!.id
+                                user.goals = userResponse.user!.userGoals
+                                user.days = userResponse.user!.days as! Array<Day>
+                                
                             }else{
                                 failedLogin = true
                             }
@@ -81,13 +89,18 @@ class LoginViewModel: ObservableObject {
     @Published var username:String = ""
     @Published var password: String = ""
     
-    let util: RequestUtil = RequestUtil()
+    let reqUtil: RequestUtil = RequestUtil()
+    let userUtil: UserUtil = UserUtil()
     
     @Published var response: LogInResponse?
     
     func login() async throws {
         //print("Sending to Backend")
-        response = try await util.sendLoginRequest(req: LogInRequest(username: username, password: password))
+        response = try await reqUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
+    }
+    
+    func getUser(token: String) async throws -> UserResponse{
+        return try await userUtil.getUser(token: token)
     }
     
 }

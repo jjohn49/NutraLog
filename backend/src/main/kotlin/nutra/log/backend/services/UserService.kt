@@ -25,7 +25,7 @@ class UserService(@Autowired val repo: UserRepository) {
     fun addDayToUser(userId: String, dayId:ObjectId){
         val user = this.findById(userId)
 
-        user.days.add(dayId)
+        user.days.add(dayId.toString())
 
         repo.save(user)
     }
