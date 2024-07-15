@@ -14,6 +14,11 @@
 		1E810B572BF139AE003C39E1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E810B562BF139AE003C39E1 /* User.swift */; };
 		1E810B592BF13B44003C39E1 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E810B582BF13B44003C39E1 /* Day.swift */; };
 		1EE8B0D92BEFCFF3005C578A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE8B0D82BEFCFF3005C578A /* LoginView.swift */; };
+		1EEE33F82C45A372009C2AEB /* NutrientTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE33F72C45A372009C2AEB /* NutrientTrackingView.swift */; };
+		1EEE33FB2C45A507009C2AEB /* BackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE33FA2C45A507009C2AEB /* BackendService.swift */; };
+		1EEE34042C45AC7A009C2AEB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE34032C45AC7A009C2AEB /* LoginViewModel.swift */; };
+		1EEE340C2C45B464009C2AEB /* TargetProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE340B2C45B464009C2AEB /* TargetProgressViewStyle.swift */; };
+		1EEE340E2C45B4EE009C2AEB /* TargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE340D2C45B4EE009C2AEB /* TargetView.swift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
@@ -26,6 +31,11 @@
 		1E810B562BF139AE003C39E1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1E810B582BF13B44003C39E1 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		1EE8B0D82BEFCFF3005C578A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		1EEE33F72C45A372009C2AEB /* NutrientTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientTrackingView.swift; sourceTree = "<group>"; };
+		1EEE33FA2C45A507009C2AEB /* BackendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendService.swift; sourceTree = "<group>"; };
+		1EEE34032C45AC7A009C2AEB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		1EEE340B2C45B464009C2AEB /* TargetProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetProgressViewStyle.swift; sourceTree = "<group>"; };
+		1EEE340D2C45B4EE009C2AEB /* TargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetView.swift; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frontend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -52,23 +62,132 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		1E810B552BF13938003C39E1 /* Model */ = {
+		1EEE33F92C45A4F0009C2AEB /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				1E810B562BF139AE003C39E1 /* User.swift */,
-				1E810B582BF13B44003C39E1 /* Day.swift */,
+				1EEE33FA2C45A507009C2AEB /* BackendService.swift */,
 			);
-			path = Model;
+			path = Service;
 			sourceTree = "<group>";
 		};
-		1EE8B0D72BEFCFDB005C578A /* View */ = {
+		1EEE33FC2C45A6EE009C2AEB /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				1EEE34082C45AD03009C2AEB /* Shared */,
+				1EEE33FF2C45A716009C2AEB /* Settings */,
+				1EEE33FE2C45A70A009C2AEB /* Home */,
+				1EEE33FD2C45A701009C2AEB /* Login */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		1EEE33FD2C45A701009C2AEB /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				1EEE34022C45A73F009C2AEB /* ViewModels */,
+				1EEE34012C45A733009C2AEB /* Models */,
+				1EEE34002C45A724009C2AEB /* Views */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		1EEE33FE2C45A70A009C2AEB /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				1EEE34072C45ACEA009C2AEB /* Models */,
+				1EEE34062C45ACE2009C2AEB /* ViewModels */,
+				1EEE34052C45ACD8009C2AEB /* Views */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		1EEE33FF2C45A716009C2AEB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		1EEE34002C45A724009C2AEB /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				1EE8B0D82BEFCFF3005C578A /* LoginView.swift */,
-				1E0904CF2C4028AC00615AC0 /* HomePageView.swift */,
-				1E0904D12C4049C600615AC0 /* LoadingView.swift */,
 			);
-			path = View;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1EEE34012C45A733009C2AEB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1EEE34022C45A73F009C2AEB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1EEE34032C45AC7A009C2AEB /* LoginViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		1EEE34052C45ACD8009C2AEB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1EEE33F72C45A372009C2AEB /* NutrientTrackingView.swift */,
+				1E0904CF2C4028AC00615AC0 /* HomePageView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1EEE34062C45ACE2009C2AEB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		1EEE34072C45ACEA009C2AEB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1EEE34082C45AD03009C2AEB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				1EEE340F2C45B4FF009C2AEB /* ViewModels */,
+				1EEE340A2C45AD21009C2AEB /* Models */,
+				1EEE34092C45AD07009C2AEB /* Views */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		1EEE34092C45AD07009C2AEB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1E0904D12C4049C600615AC0 /* LoadingView.swift */,
+				1EEE340B2C45B464009C2AEB /* TargetProgressViewStyle.swift */,
+				1EEE340D2C45B4EE009C2AEB /* TargetView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1EEE340A2C45AD21009C2AEB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1E810B582BF13B44003C39E1 /* Day.swift */,
+				1E810B562BF139AE003C39E1 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1EEE340F2C45B4FF009C2AEB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		42799AB246E5F90AF97AA0EF /* Frameworks */ = {
@@ -99,8 +218,8 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
-				1E810B552BF13938003C39E1 /* Model */,
-				1EE8B0D72BEFCFDB005C578A /* View */,
+				1EEE33FC2C45A6EE009C2AEB /* Features */,
+				1EEE33F92C45A4F0009C2AEB /* Service */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -215,11 +334,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E810B572BF139AE003C39E1 /* User.swift in Sources */,
+				1EEE33FB2C45A507009C2AEB /* BackendService.swift in Sources */,
 				1EE8B0D92BEFCFF3005C578A /* LoginView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				1EEE340C2C45B464009C2AEB /* TargetProgressViewStyle.swift in Sources */,
+				1EEE340E2C45B4EE009C2AEB /* TargetView.swift in Sources */,
 				1E810B592BF13B44003C39E1 /* Day.swift in Sources */,
+				1EEE33F82C45A372009C2AEB /* NutrientTrackingView.swift in Sources */,
 				1E0904D02C4028AC00615AC0 /* HomePageView.swift in Sources */,
 				1E0904D22C4049C600615AC0 /* LoadingView.swift in Sources */,
+				1EEE34042C45AC7A009C2AEB /* LoginViewModel.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

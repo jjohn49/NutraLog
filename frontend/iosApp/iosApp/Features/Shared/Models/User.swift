@@ -14,5 +14,10 @@ class User: ObservableObject{
     @Published var token :String = ""
     @Published var goals: UserGoal? = nil
     @Published var days: Array<Day> = []
+    
+    
+    func getGoals() -> UserGoal{
+        return goals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 50)
+    }
  
 }

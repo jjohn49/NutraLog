@@ -15,15 +15,14 @@ struct LoginView: View {
     
     @ObservedObject var viewModel: LoginViewModel = LoginViewModel()
     
-    @State var failedLogin: Bool = false
-    
     @Binding var loading: Bool
+    
     
     var body: some View {
         
         VStack {
             
-            if failedLogin {
+            if viewModel.failedLogin {
                 Text("Incorrect Username or Password.  try Again").bold().background(.red)
             }
             
@@ -47,6 +46,7 @@ struct LoginView: View {
                 .padding(.top, 20)
                 
                 Divider()
+                
             }
             
             Spacer()
@@ -69,7 +69,7 @@ struct LoginView: View {
     }
     
     func logInButtonAction() {
-        loading = true
+        //loading = true
         Task{
             try await viewModel.login()
 
@@ -77,40 +77,22 @@ struct LoginView: View {
                 if(response.success){
                     user.token = response.body.token
                     let userResponse = try await viewModel.getUser(token: user.token)
-                    print(userResponse)
                     user.username = userResponse.user!.id
                     user.goals = userResponse.user!.userGoals
                     user.days = userResponse.user!.days as! Array<Day>
                     loading = false
                     
                 }else{
-                    failedLogin = true
+                    viewModel.failedLogin = true
                     loading = false
                 }
             }
         }
     }
+    
+    
 }
 
-class LoginViewModel: ObservableObject {
-    @Published var username:String = ""
-    @Published var password: String = ""
-    
-    let reqUtil: RequestUtil = RequestUtil()
-    let userUtil: UserUtil = UserUtil()
-    
-    @Published var response: LogInResponse?
-    
-    func login() async throws {
-        //print("Sending to Backend")
-        response = try await reqUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
-    }
-    
-    func getUser(token: String) async throws -> UserResponse{
-        return try await userUtil.getUser(token: token)
-    }
-    
-}
 
 #Preview {
     @State var b = false
