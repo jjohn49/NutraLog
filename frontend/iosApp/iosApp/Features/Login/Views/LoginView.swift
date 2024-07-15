@@ -72,14 +72,11 @@ struct LoginView: View {
         //loading = true
         Task{
             try await viewModel.login()
-
+            
             if let response = viewModel.response{
                 if(response.success){
                     user.token = response.body.token
-                    let userResponse = try await viewModel.getUser(token: user.token)
-                    user.username = userResponse.user!.id
-                    user.goals = userResponse.user!.userGoals
-                    user.days = userResponse.user!.days as! Array<Day>
+                    try await user.refresh()
                     loading = false
                     
                 }else{

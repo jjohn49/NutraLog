@@ -19,7 +19,6 @@ class LoginViewModel: ObservableObject {
     
     
     let reqUtil: RequestUtil = RequestUtil()
-    let userUtil: UserUtil = UserUtil()
     
     @Published var response: LogInResponse?
     
@@ -28,8 +27,7 @@ class LoginViewModel: ObservableObject {
         response = try await reqUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
     }
     
-    func getUser(token: String) async throws -> UserResponse{
-        return try await userUtil.getUser(token: token)
-    }
+    
+    
     
 }

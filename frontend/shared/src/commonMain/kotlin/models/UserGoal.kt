@@ -8,4 +8,5 @@ data class UserGoal(
     val proteinGrams: Int,
     val carbGrams: Int,
     val fatGrams:Int
-)
+){
+}

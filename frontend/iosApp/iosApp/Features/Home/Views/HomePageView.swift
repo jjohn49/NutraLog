@@ -25,7 +25,8 @@ struct HomePageView: View {
             }
         }else{
             VStack{
-                Text("Logged in \(user.username)")
+                NutrientTrackingView()
+                DaysListView()
             }
         }
     }
