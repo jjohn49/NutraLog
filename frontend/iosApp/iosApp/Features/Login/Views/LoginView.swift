@@ -76,6 +76,7 @@ struct LoginView: View {
             if let response = viewModel.response{
                 if(response.success){
                     user.token = response.body.token
+                    user.authenticatedRequest = AuthenticatedRequest(token: user.token)
                     try await user.refresh()
                     loading = false
                     

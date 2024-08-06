@@ -27,3 +27,8 @@ data class LogInRequest(
     val username:String,
     val password: String
 )
+
+@Serializable
+data class AuthenticatedRequest(
+    val token: String
+)

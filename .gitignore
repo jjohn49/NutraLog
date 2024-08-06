@@ -91,3 +91,4 @@ iOSInjectionProject/
 /backend/node_modules
 /node_modules
 backend/.env
+backend/src/main/resources/application.properties.bak

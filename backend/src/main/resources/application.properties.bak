@@ -1,4 +1,4 @@
 spring.application.name=backend
-spring.data.mongodb.uri=mongodb://admin:secure@localhost:27017/admin
+spring.data.mongodb.uri=mongodb+srv://john:Green2002@database.k24fjf8.mongodb.net/Database
 fdc-api-key=fqb4Fojb2agvj6XQOiYX86LtYJPvqXCYlAv4oTsa
 security.key=hnvsjahblijfqrnokmfn4849jwoijf84nfnejek4eoi4ioirenknvorejno

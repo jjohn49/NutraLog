@@ -33,5 +33,5 @@ struct HomePageView: View {
 }
 
 #Preview {
-    return HomePageView().environmentObject(User())
+    return HomePageView().environmentObject(User(username: "JJ", token: "token"))
 }

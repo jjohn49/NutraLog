@@ -10,10 +10,20 @@ import SwiftUI
 
 struct DaysListView: View {
     @EnvironmentObject var user: User
+    @StateObject var viewModel: DayListViewModel = DayListViewModel()
     var body: some View {
-        ForEach(user.days, id: \.self){day in
-            HStack{
-                Text(day.id.date)
+        if(user.days.isEmpty){
+            Text("You have no days.")
+            Button("Add Day", action: {
+                Task{
+                    try await viewModel.addNewDay(action: user.addDay)
+                }
+            })
+        }else{
+            ForEach(user.days, id: \.self){day in
+                HStack{
+                    Text(day.id.date)
+                }
             }
         }
     }
