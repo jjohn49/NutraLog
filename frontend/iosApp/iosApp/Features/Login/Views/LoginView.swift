@@ -77,6 +77,7 @@ struct LoginView: View {
                 if(response.success){
                     user.token = response.body.token
                     user.authenticatedRequest = AuthenticatedRequest(token: user.token)
+                    try await user.checkIfTodayWasCreated()
                     try await user.refresh()
                     loading = false
                     

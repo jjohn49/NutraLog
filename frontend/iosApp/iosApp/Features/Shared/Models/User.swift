@@ -20,6 +20,20 @@ class User: ObservableObject{
     let dayUtil: DayUtil = DayUtil()
     let userUtil: UserUtil = UserUtil()
     
+    let dateFormatter = DateFormatter()
+    
+    init() {
+        self.username = ""
+        self.token = ""
+        self.goals = UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
+        self.nutrients = UserNutrients(calories: 0.0, proteinGrams: 0.0, carbGrams: 0.0, fatGrams: 0.0)
+        self.days = []
+        self.authenticatedRequest = AuthenticatedRequest(token: "")
+        
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'ZZZZZZZZZZZZZZZZZZ"
+    }
+    
     
     func refresh() async throws {
         var r = try await pullUser()
@@ -37,6 +51,24 @@ class User: ObservableObject{
         
     }
     
+    func checkIfTodayWasCreated() async throws{
+        if days.contains(where: {self.dateFormatter.date(from: $0.id.date) != Date()} ){
+            print("couldn't find date")
+            
+            do{
+                let response = try await self.addDay()
+                
+                if(response.success){
+                    days.append(response.body!)
+                }else{
+                    print(response.message)
+                }
+            } catch {
+                print("Error adding a day")
+            }
+        }
+    }
+    
     func pullUser() async throws -> UserResponse{
         return try await userUtil.getUser(token: token)
     }
@@ -52,6 +84,8 @@ class User: ObservableObject{
     }
     
     func addDay() async throws -> CreateDayResponse {
+        
+        print("ADD DAY")
         do{
             let response = try await dayUtil.CreateDay(req: authenticatedRequest)
             try await self.refresh()
