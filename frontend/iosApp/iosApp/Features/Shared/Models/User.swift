@@ -12,23 +12,14 @@ import Shared
 class User: ObservableObject{
     @Published var username: String = ""
     @Published var token :String = ""
-    @Published var goals: UserGoal? = nil
-    @Published var nutrients: UserNutrients? = nil
+    @Published var goals: UserGoal = UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
+    @Published var nutrients: UserNutrients = UserNutrients(calories: 0.0, proteinGrams: 0.0, carbGrams: 0.0, fatGrams: 0.0)
     @Published var days: Array<Day> = []
-    
-    var authenticatedRequest : AuthenticatedRequest
+    @Published var authenticatedRequest : AuthenticatedRequest = AuthenticatedRequest(token: "")
     
     let dayUtil: DayUtil = DayUtil()
     let userUtil: UserUtil = UserUtil()
     
-    init(username: String = "", token: String = "", goals: UserGoal? = nil, nutrients: UserNutrients? = nil, days: Array<Day> = []) {
-        self.username = username
-        self.token = token
-        self.goals = goals
-        self.nutrients = nutrients
-        self.days = days
-        self.authenticatedRequest = AuthenticatedRequest(token: "")
-    }
     
     func refresh() async throws {
         var r = try await pullUser()
@@ -38,7 +29,7 @@ class User: ObservableObject{
         if r.success{
             if let user = r.user{
                 username = user.id
-                goals = user.userGoals
+                goals = user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
             }
         }
         
@@ -48,10 +39,6 @@ class User: ObservableObject{
     
     func pullUser() async throws -> UserResponse{
         return try await userUtil.getUser(token: token)
-    }
-    
-    func getGoals() -> UserGoal{
-        return goals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 50)
     }
     
     func getAllDays() async throws -> GetAllDaysResponse{

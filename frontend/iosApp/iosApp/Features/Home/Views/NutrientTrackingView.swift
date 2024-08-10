@@ -15,6 +15,8 @@ struct NutrientTrackingView: View {
     var body: some View {
         VStack{
             TargetView()
+            MacroView()
+            
         }
     }
 }

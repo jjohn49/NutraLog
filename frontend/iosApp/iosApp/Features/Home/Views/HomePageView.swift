@@ -24,14 +24,19 @@ struct HomePageView: View {
                 LoginView(loading: $loading).environmentObject(self.user)
             }
         }else{
-            VStack{
-                NutrientTrackingView()
-                DaysListView()
+            TabView{
+                NutrientTrackingView().tabItem {
+                    Text("Home")
+                }
+                CalendarView().tabItem {
+                    Text("Calendar")
+                }
+                
             }
         }
     }
 }
 
 #Preview {
-    return HomePageView().environmentObject(User(username: "JJ", token: "token"))
+    return HomePageView().environmentObject(User())
 }
