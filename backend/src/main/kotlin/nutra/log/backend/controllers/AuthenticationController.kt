@@ -31,6 +31,7 @@ class AuthenticationController {
 
     @PostMapping("login")
     fun authenticateUser(@RequestBody logInRequest: LogInRequest):ResponseEntity<*>{
-        return authenticationService.authenticate(logInRequest)
+        val x = authenticationService.authenticate(logInRequest)
+        return x
     }
 }

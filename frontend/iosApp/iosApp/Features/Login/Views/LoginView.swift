@@ -71,21 +71,15 @@ struct LoginView: View {
     func logInButtonAction() {
         //loading = true
         Task{
-            try await viewModel.login()
+            let response = try await viewModel.login()
             
-            if let response = viewModel.response{
-                if(response.success){
-                    user.token = response.body.token
-                    user.authenticatedRequest = AuthenticatedRequest(token: user.token)
-                    try await user.checkIfTodayWasCreated()
-                    try await user.refresh()
-                    loading = false
-                    
-                }else{
-                    viewModel.failedLogin = true
-                    loading = false
-                }
+            if(try await user.set(response: response)){
+                loading = false
+            }else{
+                viewModel.failedLogin = true
+                loading = false
             }
+            
         }
     }
     

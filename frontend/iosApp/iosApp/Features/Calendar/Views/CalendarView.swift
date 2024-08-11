@@ -39,7 +39,7 @@ struct CalendarView: View {
                         }
 
                     NavigationLink(isActive: $navigate) {
-                        
+                        DayView(date: $selectDate)
                     } label: {
                         EmptyView()
                     }

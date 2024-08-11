@@ -32,7 +32,7 @@ class DayUtil {
 
     suspend fun getDaysForUser(req: AuthenticatedRequest): GetAllDaysResponse{
         val uri: String = "http://localhost:8080/day/get/all"
-        //println(req)
+        println(req)
         val response = client.get(urlString = uri) {
             header(HttpHeaders.Authorization, req.token)
         }

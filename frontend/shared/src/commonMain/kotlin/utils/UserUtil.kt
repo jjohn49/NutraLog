@@ -32,6 +32,8 @@ class UserUtil {
     suspend fun getUser(token: String): UserResponse{
         val uri: String = "http://localhost:8080/user/get"
 
+        println(token)
+
         val response: UserResponse = client.get(uri){
             header(HttpHeaders.Authorization, token)
         }.body()

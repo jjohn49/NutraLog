@@ -31,7 +31,22 @@ class User: ObservableObject{
         self.authenticatedRequest = AuthenticatedRequest(token: "")
         
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'ZZZZZZZZZZZZZZZZZZ"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+    }
+    
+    func set(response:LogInResponse) async throws-> Bool{
+        if response.success{
+            self.username = response.body!.user.email
+            self.token = response.body!.token
+            self.goals = response.body!.user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
+            self.authenticatedRequest = AuthenticatedRequest(token: response.body!.token)
+            
+            try await pullDays()
+            
+            return true
+        }
+        
+        return false
     }
     
     

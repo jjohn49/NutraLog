@@ -16,7 +16,7 @@ data class RegisterResponse(
 @Serializable
 data class LogInResponse(
     override val success: Boolean,
-    override val body: LogInBody,
+    override val body: LogInBody?,
     override val message: String,
     override val request: LogInRequest,
 ): GenericResponse<LogInRequest>
@@ -24,5 +24,5 @@ data class LogInResponse(
 @Serializable
 data class LogInBody(
     val token: String,
-    //val user: User?
+    val user: User
 )

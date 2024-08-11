@@ -44,11 +44,11 @@ class AuthenticationService {
                 )
             )
 
-            val user = userService.findById(logInRequest.username)
+            val user: User = userService.findById(logInRequest.username)
             val accessToken = tokenService.createToken(userService.findById(logInRequest.username))
-            return ResponseEntity.ok(LogInResponse(true, LogInBody(accessToken),"Successful Login.", logInRequest))
+            return ResponseEntity.ok(LogInResponse(true, LogInBody(accessToken, user),"Successful Login.", logInRequest))
         }catch (e: Exception){
-            return ResponseEntity.ok(LogInResponse(false,LogInBody(""),"Failed Login.", logInRequest))
+            return ResponseEntity.ok(LogInResponse(false,null,"Failed Login.", logInRequest))
         }
 
     }
