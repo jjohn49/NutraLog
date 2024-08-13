@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Reference
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.DocumentReference
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 @Document("day")

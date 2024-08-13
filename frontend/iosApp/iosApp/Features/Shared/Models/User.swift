@@ -66,13 +66,21 @@ class User: ObservableObject{
         
     }
     
+    //TODO: Create a function that checkes whether a certain date other than today exists
+    //Im thinking just modifying the function below to accept a date param
+    
     func checkIfTodayWasCreated() async throws{
-        if days.contains(where: {self.dateFormatter.date(from: $0.id.date) != Date()} ){
+        //print(Date.now)
+        if !days.contains(where: {day in
+            let swift = Date.now
+            let kotlin = day.date
+            
+            return dateFormatter.string(from: swift) == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
+        } ){
             print("couldn't find date")
             
             do{
                 let response = try await self.addDay()
-                
                 if(response.success){
                     days.append(response.body!)
                 }else{
@@ -81,6 +89,8 @@ class User: ObservableObject{
             } catch {
                 print("Error adding a day")
             }
+        }else{
+            print("Day Aslready exists")
         }
     }
     
@@ -99,7 +109,6 @@ class User: ObservableObject{
     }
     
     func addDay() async throws -> CreateDayResponse {
-        
         print("ADD DAY")
         do{
             let response = try await dayUtil.CreateDay(req: authenticatedRequest)

@@ -12,17 +12,22 @@ import Shared
 struct DayView: View {
     
     @EnvironmentObject var user: User
-    
+    @Binding var day: Day?
     @Binding var date: Date
-    @State var day: Day? = nil
+    
+    init(day: Binding<Day?> = Binding.constant(nil), date: Binding<Date>) {
+        self._day = day
+        self._date = date
+    }
     
     var body: some View {
-        if day != nil {
+        if day == nil {
             VStack{
                 Text(user.dateFormatter.string(from: date))
                 
                 Button(action: {
                     Task{
+                        print("Button Was clicked")
                         try await user.checkIfTodayWasCreated()
                     }
                 }, label: {
