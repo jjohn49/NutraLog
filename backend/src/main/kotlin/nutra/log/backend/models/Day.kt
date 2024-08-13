@@ -7,6 +7,7 @@ import org.springframework.data.annotation.ReadOnlyProperty
 import org.springframework.data.annotation.Reference
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.DocumentReference
+import java.time.LocalDate
 import java.util.Date
 
 @Document("day")
@@ -16,7 +17,7 @@ data class Day(
 
     val userId: String,
 
-    val date: Date = Date(),
+    val date: LocalDate = LocalDate.now(),
 
     val foodsEaten: ArrayList<FoodServing> = arrayListOf()
 )

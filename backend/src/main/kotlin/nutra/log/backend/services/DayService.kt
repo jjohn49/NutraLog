@@ -5,12 +5,17 @@ import nutra.log.backend.repositories.DayRepository
 import nutra.log.backend.repositories.FoodRepository
 import nutra.log.backend.repositories.UserRepository
 import nutra.log.backend.requests.AddFootToDayRequest
+import nutra.log.backend.responses.GenericResponse
+import nutra.log.backend.responses.GetDayResponse
 import org.bson.types.ObjectId
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
+import java.lang.Exception
+import java.time.LocalDate
 
 @Service
 class DayService(@Autowired val dayRepo: DayRepository) {
@@ -54,5 +59,16 @@ class DayService(@Autowired val dayRepo: DayRepository) {
 
     fun getAllDays(authentication: Authentication): List<Day>{
         return dayRepo.findAllByUserId(authentication.name)
+    }
+
+    fun getDay(authentication: Authentication, dateStr: String): ResponseEntity<GetDayResponse>{
+        val date: LocalDate = LocalDate.parse(dateStr)
+
+        try {
+            val day: Day = dayRepo.findDayByDateAndUserId(date, authentication.name)
+            return ResponseEntity.ok(GetDayResponse(true,day,"Found Day",null))
+        } catch (e: Exception){
+            return ResponseEntity.badRequest().build()
+        }
     }
 }

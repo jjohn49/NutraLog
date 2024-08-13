@@ -14,10 +14,10 @@ struct DayView: View {
     @EnvironmentObject var user: User
     
     @Binding var date: Date
-    @State var day: Day = Day(id: DayId(timestamp: 0, date: ""), userId: "", foodsEaten: [])
+    @State var day: Day? = nil
     
     var body: some View {
-        if day.id.date == ""{
+        if day != nil {
             VStack{
                 Text(user.dateFormatter.string(from: date))
                 
@@ -28,11 +28,7 @@ struct DayView: View {
                 }, label: {
                     Text("Create Day")
                 })
-            }.onAppear(perform: {
-                if user.days.contains(where: {if day}){
-                    
-                }
-            })
+            }
         }
     }
     

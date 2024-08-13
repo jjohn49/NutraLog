@@ -7,9 +7,11 @@
 //
 
 import SwiftUI
+import Shared
 
 struct CalendarView: View {
         @State private var selectDate = Date()
+        @State var day: Day? = nil
         @State private var navigate = true
 
         var dateFormatter: DateFormatter {
@@ -33,7 +35,7 @@ struct CalendarView: View {
                     )
                         .accentColor(Color.blue)
                         .datePickerStyle(.graphical)
-                    
+                        
                         .onChange(of: selectDate) { newValue in
                             navigate = true
                         }

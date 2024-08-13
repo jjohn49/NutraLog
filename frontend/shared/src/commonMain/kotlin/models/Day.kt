@@ -1,12 +1,15 @@
 package models
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Day(
     val id: DayId,
-    val userId: String,
+    val userId: String = "",
+    val date: LocalDate = Clock.System.now().toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault()).date,
     val foodsEaten: ArrayList<FoodServing> = arrayListOf()
 ){
     fun toUserNutrients(): UserNutrients{
@@ -28,6 +31,12 @@ data class Day(
         }
 
         return UserNutrients(calories, pro, carb, fat)
+    }
+
+    companion object{
+        fun getEmptyDay(): Day {
+            return Day(DayId(0,""))
+        }
     }
 }
 
