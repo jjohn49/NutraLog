@@ -1,5 +1,6 @@
 package utils
 
+import frontend.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -21,6 +22,8 @@ import response.GetAllDaysResponse
 
 class DayUtil {
 
+    private val backend_url = BuildKonfig.BACKEND_URL
+
     val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -32,7 +35,7 @@ class DayUtil {
     }
 
     suspend fun getDaysForUser(req: AuthenticatedRequest): GetAllDaysResponse{
-        val uri: String = "http://localhost:8080/day/get/all"
+        val uri: String = "${backend_url}/day/get/all"
         println(req)
         val response = client.get(urlString = uri) {
             header(HttpHeaders.Authorization, req.token)
@@ -44,7 +47,7 @@ class DayUtil {
 
     //Date needs to be in format of yyyy-MM-dd
     suspend fun getDayForUser(auth: AuthenticatedRequest, date: String): GetDayResponse{
-        val uri: String = "http://localhost:8080/day/get?day=${date}"
+        val uri: String = "${backend_url}/day/get?day=${date}"
 
         val response = client.get(urlString = uri) {
             header(HttpHeaders.Authorization, auth.token)
@@ -55,7 +58,7 @@ class DayUtil {
     }
 
     suspend fun CreateDay(auth: AuthenticatedRequest, req: CreateDayRequest): GetDayResponse{
-        val uri: String = "http://localhost:8080/day/create"
+        val uri: String = "${backend_url}/day/create"
 
         println(req)
 

@@ -1,5 +1,6 @@
 package utils
 
+import frontend.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -19,6 +20,8 @@ import response.UserResponse
 
 class UserUtil {
 
+    private val backend_url = BuildKonfig.BACKEND_URL
+
     val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -30,7 +33,7 @@ class UserUtil {
     }
 
     suspend fun getUser(token: String): UserResponse{
-        val uri: String = "http://localhost:8080/user/get"
+        val uri: String = "${backend_url}/user/get"
 
         println(token)
 

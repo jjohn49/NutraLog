@@ -1,9 +1,14 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     kotlin("plugin.serialization") version "1.9.23"
 
+    id("com.codingfeline.buildkonfig") version "0.15.1"
 }
 
 kotlin {
@@ -63,5 +68,18 @@ android {
 dependencies {
     implementation(libs.protolite.well.known.types)
 }
+
+buildkonfig {
+    packageName = "frontend"
+
+    val backend_url: String = gradleLocalProperties(rootDir,providers).getProperty("backend.url")
+
+    defaultConfigs {
+        buildConfigField(STRING, "BACKEND_URL", backend_url)
+    }
+}
+
+
+
 
 

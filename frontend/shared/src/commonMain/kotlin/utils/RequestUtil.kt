@@ -1,5 +1,6 @@
 package utils
 
+import frontend.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -16,6 +17,8 @@ import response.LogInResponse
 
 class RequestUtil {
 
+    private val backend_url = BuildKonfig.BACKEND_URL
+
     val client = HttpClient {
         install(ContentNegotiation) {
             json(Json{
@@ -26,7 +29,7 @@ class RequestUtil {
     }
 
      suspend fun sendLoginRequest(req: LogInRequest): LogInResponse{
-        val uri: String = "http://localhost:8080/auth/login"
+        val uri: String = "${backend_url}/auth/login"
 
          println(req)
 
