@@ -3,6 +3,7 @@ package nutra.log.backend.controllers
 import nutra.log.backend.models.Day
 import nutra.log.backend.models.Food
 import nutra.log.backend.requests.AddFootToDayRequest
+import nutra.log.backend.requests.CreateDayRequest
 import nutra.log.backend.responses.GetDayResponse
 import nutra.log.backend.services.DayService
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,10 +22,9 @@ import org.springframework.web.bind.annotation.RestController
 class DayController(@Autowired val service: DayService) {
 
     @PostMapping("create")
-    fun createDay(authentication: Authentication): Day?{
-        val newDay = Day(userId = authentication.name)
-        service.addDay(authentication, newDay)
-        return newDay
+    fun createDay(authentication: Authentication, @RequestBody createDayRequest: CreateDayRequest): ResponseEntity<GetDayResponse>{
+        val newDay = Day(userId = authentication.name, date = createDayRequest.date)
+        return service.addDay(authentication, newDay)
     }
 
     @PutMapping("add/food")
@@ -39,7 +39,7 @@ class DayController(@Autowired val service: DayService) {
         return service.getAllDays(authentication)
     }
 
-    @GetMapping("get/day")
+    @GetMapping("get")
     fun getDay(@RequestParam day: String, authentication: Authentication): ResponseEntity<GetDayResponse>{
         return service.getDay(authentication, day)
     }

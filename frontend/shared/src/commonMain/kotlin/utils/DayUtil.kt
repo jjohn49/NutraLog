@@ -10,13 +10,14 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
-import models.Day
 import requests.AuthenticatedRequest
-import response.CreateDayResponse
+import requests.CreateDayRequest
+import response.GetDayResponse
 import response.GetAllDaysResponse
-import response.LogInResponse
 
 class DayUtil {
 
@@ -41,16 +42,38 @@ class DayUtil {
         return ret
     }
 
-    suspend fun CreateDay(req: AuthenticatedRequest): CreateDayResponse{
+    //Date needs to be in format of yyyy-MM-dd
+    suspend fun getDayForUser(auth: AuthenticatedRequest, date: String): GetDayResponse{
+        val uri: String = "http://localhost:8080/day/get?day=${date}"
+
+        val response = client.get(urlString = uri) {
+            header(HttpHeaders.Authorization, auth.token)
+        }
+
+        return response.body()
+
+    }
+
+    suspend fun CreateDay(auth: AuthenticatedRequest, req: CreateDayRequest): GetDayResponse{
         val uri: String = "http://localhost:8080/day/create"
 
         println(req)
 
         val response = client.post(urlString = uri) {
-            header(HttpHeaders.Authorization, req.token)
+            header(HttpHeaders.Authorization, auth.token)
+            contentType(ContentType.Application.Json)
+            setBody(req)
         }
 
-        val ret = CreateDayResponse(true,response.body(),"Added Day to User",null)
-        return ret
+        return response.body()
+    }
+
+    companion object{
+        //String needs to be formatted: yyyy-MM-dd
+        //Should be only used in SwiftUI
+        fun createLocalDate(dateStr: String) : LocalDate{
+            val split = dateStr.split("-")
+            return LocalDate(split.get(0).toInt(), split.get(1).toInt(), split.get(1).toInt())
+        }
     }
 }

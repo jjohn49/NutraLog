@@ -28,10 +28,14 @@ class RequestUtil {
      suspend fun sendLoginRequest(req: LogInRequest): LogInResponse{
         val uri: String = "http://localhost:8080/auth/login"
 
+         println(req)
+
         val response: LogInResponse = client.post(uri){
             contentType(ContentType.Application.Json)
             setBody(req)
         }.body()
+
+         println(response)
 
         return response
     }

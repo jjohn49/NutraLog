@@ -69,21 +69,38 @@ class User: ObservableObject{
     //TODO: Create a function that checkes whether a certain date other than today exists
     //Im thinking just modifying the function below to accept a date param
     
-    func checkIfTodayWasCreated() async throws{
-        //print(Date.now)
-        if !days.contains(where: {day in
-            let swift = Date.now
+    func wasDayCreatedAlready(date: Date) -> Bool{
+        return self.wasDayCreatedAlready(dayStr: self.dateFormatter.string(from: date))
+    }
+    
+    
+    //Compares a Kotlin LocalDate to a Swift Date and returns true of they are the same date
+    func compareKotlinDateVsSwiftDate(kotlin: Kotlinx_datetimeLocalDate, swift : Date) -> Bool{
+        
+        print(self.dateFormatter.string(from: swift))
+        print(kotlin.description())
+        return self.dateFormatter.string(from: swift) == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
+    }
+    
+    
+    //Need to use yyyy-MM-dd format
+    func wasDayCreatedAlready(dayStr: String) -> Bool{
+        return days.contains(where: {day in
             let kotlin = day.date
             
-            return dateFormatter.string(from: swift) == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
-        } ){
-            print("couldn't find date")
+            return dayStr == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
+        } )
+    }
+    
+    func createDayForDate(date: Date) async throws{
+        if !self.wasDayCreatedAlready(date: date) {
             
             do{
-                let response = try await self.addDay()
+                let response = try await self.addDay(date: date)
                 if(response.success){
                     days.append(response.body!)
                 }else{
+                    print("RESPONSE TO CREATING A DAY FAILED")
                     print(response.message)
                 }
             } catch {
@@ -92,6 +109,11 @@ class User: ObservableObject{
         }else{
             print("Day Aslready exists")
         }
+    }
+    
+    //Creates a new Day OBJ for today if it doesn't already exist
+    func createDayForToday() async throws{
+        return try await createDayForDate(date: Date.now)
     }
     
     func pullUser() async throws -> UserResponse{
@@ -103,22 +125,40 @@ class User: ObservableObject{
     }
     
     func pullDays() async throws{
-        print(try await getAllDays())
         days = try await getAllDays().body
+        
         print(days)
     }
     
-    func addDay() async throws -> CreateDayResponse {
-        print("ADD DAY")
+    func addDay(dateStr: String) async throws -> GetDayResponse {
         do{
-            let response = try await dayUtil.CreateDay(req: authenticatedRequest)
+            let response = try await dayUtil.CreateDay(auth: authenticatedRequest, req: CreateDayRequest(date: DayUtil.companion.createLocalDate(dateStr: dateStr)))
+            
             try await self.refresh()
             return response
         } catch {
             print("Error sending add day to backend")
         }
         
-        return CreateDayResponse(success: false, body: nil, message: "Failed to reach server", request: authenticatedRequest.description())
+        return GetDayResponse(success: false, body: nil, message: "Failed to reach server", request: authenticatedRequest.description())
+    }
+    
+    func addDay(date: Date) async throws -> GetDayResponse{
+        return try await addDay(dateStr: dateFormatter.string(from: date))
+    }
+    
+    func getDayOnline(date: String) async throws -> GetDayResponse {
+        return try await dayUtil.getDayForUser(auth: authenticatedRequest, date: date)
+    }
+    
+    func getDayOnline(date: Date) async throws -> GetDayResponse{
+        return try await getDayOnline(date: dateFormatter.string(from: date))
+    }
+    
+    func getDay(date: Date) -> Day?{
+        return days.first(where: {day in
+            return self.compareKotlinDateVsSwiftDate(kotlin: day.date, swift: date)
+        })
     }
     
     

@@ -14,8 +14,8 @@ import org.springframework.data.domain.Example
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
-import java.lang.Exception
 import java.time.LocalDate
+import kotlin.Exception
 
 @Service
 class DayService(@Autowired val dayRepo: DayRepository) {
@@ -27,10 +27,15 @@ class DayService(@Autowired val dayRepo: DayRepository) {
     @Autowired
     private lateinit var foodFactsService: OpenFoodFactsService
 
-    fun addDay(authentication: Authentication, day: Day){
-        dayRepo.insert(day)
-        val user = userService.findById(authentication.name)
-        userService.addDayToUser(user.id, day.id)
+    fun addDay(authentication: Authentication, day: Day): ResponseEntity<GetDayResponse>{
+        return try {
+            dayRepo.insert(day)
+            val user = userService.findById(authentication.name)
+            userService.addDayToUser(user.id, day.id)
+            ResponseEntity.ok(GetDayResponse(true,day,"Succesfully added day to user ${user.id}",null ))
+        } catch(e: Exception){
+            ResponseEntity.ok(GetDayResponse(false, null, "Couldn't Add Day",null))
+        }
     }
 
     fun addFoodToDay(authentication: Authentication, req : AddFootToDayRequest): Day?{

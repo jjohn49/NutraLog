@@ -6,15 +6,4 @@
 //  Copyright © 2024 orgName. All rights reserved.
 //
 
-import Foundation
-import Shared
 
-
-class DayListViewModel: ObservableObject{
-    
-    
-    func addNewDay(action: () async throws -> CreateDayResponse) async throws{
-        let response = try await action()
-        print(response)
-    }
-}

@@ -2,6 +2,7 @@ package models
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -31,6 +32,10 @@ data class Day(
         }
 
         return UserNutrients(calories, pro, carb, fat)
+    }
+
+    fun dateToString() : String {
+        return this.toString()
     }
 
     companion object{

@@ -27,8 +27,9 @@ struct DayView: View {
                 
                 Button(action: {
                     Task{
-                        print("Button Was clicked")
-                        try await user.checkIfTodayWasCreated()
+                        
+                        try await user.createDayForDate(date: date)
+                        day = user.getDay(date: date)
                     }
                 }, label: {
                     Text("Create Day")

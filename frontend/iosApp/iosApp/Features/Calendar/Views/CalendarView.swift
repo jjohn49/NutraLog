@@ -10,6 +10,7 @@ import SwiftUI
 import Shared
 
 struct CalendarView: View {
+    @EnvironmentObject var user: User
         @State private var selectDate = Date()
         @State var day: Day? = nil
         @State private var navigate = true
@@ -23,10 +24,6 @@ struct CalendarView: View {
         var body: some View {
             NavigationView {
                 VStack{
-                    Text("\(selectDate, formatter: dateFormatter)")
-                        .foregroundColor(.black)
-                        .font(.system(size: 30))
-                        .fontWeight(.bold)
                     
                     DatePicker(
                         "Start Date",
@@ -37,11 +34,14 @@ struct CalendarView: View {
                         .datePickerStyle(.graphical)
                         
                         .onChange(of: selectDate) { newValue in
+                            if(user.wasDayCreatedAlready(date: selectDate)){
+                                day = user.getDay(date: selectDate)
+                            }
                             navigate = true
                         }
 
                     NavigationLink(isActive: $navigate) {
-                        DayView(date: $selectDate)
+                        DayView( day: $day, date: $selectDate).navigationTitle(dateFormatter.string(from: selectDate))
                     } label: {
                         EmptyView()
                     }
@@ -52,5 +52,5 @@ struct CalendarView: View {
 
 
 #Preview {
-    CalendarView()
+    CalendarView().environmentObject(User())
 }

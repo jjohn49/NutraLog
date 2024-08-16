@@ -12,7 +12,7 @@ data class GetAllDaysResponse(
 ): GenericResponse<String?>
 
 @Serializable
-data class CreateDayResponse(
+data class GetDayResponse(
     override val success: Boolean,
     override val body: Day?,
     override val message: String,
