@@ -35,6 +35,8 @@ struct DayView: View {
                     Text("Create Day")
                 })
             }
+        }else{
+            Text("Day was already created")
         }
     }
     

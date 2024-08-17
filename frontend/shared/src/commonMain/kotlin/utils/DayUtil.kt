@@ -76,7 +76,7 @@ class DayUtil {
         //Should be only used in SwiftUI
         fun createLocalDate(dateStr: String) : LocalDate{
             val split = dateStr.split("-")
-            return LocalDate(split.get(0).toInt(), split.get(1).toInt(), split.get(1).toInt())
+            return LocalDate(split.get(0).toInt(), split.get(1).toInt(), split.get(2).toInt())
         }
     }
 }

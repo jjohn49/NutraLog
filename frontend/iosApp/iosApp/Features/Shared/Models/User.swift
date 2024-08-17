@@ -76,9 +76,6 @@ class User: ObservableObject{
     
     //Compares a Kotlin LocalDate to a Swift Date and returns true of they are the same date
     func compareKotlinDateVsSwiftDate(kotlin: Kotlinx_datetimeLocalDate, swift : Date) -> Bool{
-        
-        print(self.dateFormatter.string(from: swift))
-        print(kotlin.description())
         return self.dateFormatter.string(from: swift) == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
     }
     
@@ -144,6 +141,7 @@ class User: ObservableObject{
     }
     
     func addDay(date: Date) async throws -> GetDayResponse{
+        print(dateFormatter.string(from: date))
         return try await addDay(dateStr: dateFormatter.string(from: date))
     }
     

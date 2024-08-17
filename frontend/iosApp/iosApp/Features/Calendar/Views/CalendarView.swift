@@ -34,14 +34,14 @@ struct CalendarView: View {
                         .datePickerStyle(.graphical)
                         
                         .onChange(of: selectDate) { newValue in
-                            if(user.wasDayCreatedAlready(date: selectDate)){
-                                day = user.getDay(date: selectDate)
-                            }
+                            //day = user.getDay(date: selectDate)
                             navigate = true
                         }
 
                     NavigationLink(isActive: $navigate) {
-                        DayView( day: $day, date: $selectDate).navigationTitle(dateFormatter.string(from: selectDate))
+                        DayView( day: $day, date: $selectDate).navigationTitle(dateFormatter.string(from: selectDate)).onAppear(perform: {
+                            day = user.getDay(date: selectDate)
+                        })
                     } label: {
                         EmptyView()
                     }

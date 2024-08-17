@@ -69,7 +69,7 @@ struct LoginView: View {
     }
     
     func logInButtonAction() {
-        //loading = true
+        loading = true
         Task{
             let response = try await viewModel.login()
             
