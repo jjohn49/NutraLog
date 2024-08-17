@@ -32,7 +32,7 @@ class DayService(@Autowired val dayRepo: DayRepository) {
             dayRepo.insert(day)
             val user = userService.findById(authentication.name)
             userService.addDayToUser(user.id, day.id)
-            ResponseEntity.ok(GetDayResponse(true,day,"Succesfully added day to user ${user.id}",null ))
+            ResponseEntity.ok(GetDayResponse(true,dayToDayKMM(day),"Succesfully added day to user ${user.id}",null ))
         } catch(e: Exception){
             ResponseEntity.ok(GetDayResponse(false, null, "Couldn't Add Day",null))
         }
@@ -71,9 +71,18 @@ class DayService(@Autowired val dayRepo: DayRepository) {
 
         try {
             val day: Day = dayRepo.findDayByDateAndUserId(date, authentication.name)
-            return ResponseEntity.ok(GetDayResponse(true,day,"Found Day",null))
+            return ResponseEntity.ok(GetDayResponse(true,dayToDayKMM(day),"Found Day",null))
         } catch (e: Exception){
             return ResponseEntity.badRequest().build()
         }
+    }
+
+    fun dayToDayKMM(day: Day): DayKMM{
+        val foodServings: ArrayList<FoodServingKMM> = arrayListOf()
+        day.foodsEaten.forEach {serving ->
+            foodServings.add(FoodServingKMM(foodFactsService.getFoodByCode(serving.foodId.toString()).toFood(),serving.numberOfServings))
+        }
+
+        return DayKMM(day.id,day.userId,day.date,foodServings)
     }
 }

@@ -17,13 +17,14 @@
 		1E2B14402C67BAB300D420EB /* MacroTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2B143F2C67BAB300D420EB /* MacroTextView.swift */; };
 		1E714F7D2C68F95800BF6CA0 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E714F7C2C68F95800BF6CA0 /* DayView.swift */; };
 		1E810B572BF139AE003C39E1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E810B562BF139AE003C39E1 /* User.swift */; };
+		1EB9205A2C713CD500485280 /* FoodListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB920592C713CD500485280 /* FoodListView.swift */; };
+		1EB9205C2C713E2200485280 /* FoodRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9205B2C713E2200485280 /* FoodRow.swift */; };
 		1EE8B0D92BEFCFF3005C578A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE8B0D82BEFCFF3005C578A /* LoginView.swift */; };
 		1EEE33F82C45A372009C2AEB /* NutrientTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE33F72C45A372009C2AEB /* NutrientTrackingView.swift */; };
 		1EEE33FB2C45A507009C2AEB /* BackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE33FA2C45A507009C2AEB /* BackendService.swift */; };
 		1EEE34042C45AC7A009C2AEB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE34032C45AC7A009C2AEB /* LoginViewModel.swift */; };
 		1EEE340C2C45B464009C2AEB /* TargetProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE340B2C45B464009C2AEB /* TargetProgressViewStyle.swift */; };
 		1EEE340E2C45B4EE009C2AEB /* TargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE340D2C45B4EE009C2AEB /* TargetView.swift */; };
-		1EEE34152C45CBA6009C2AEB /* DaysListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE34142C45CBA6009C2AEB /* DaysListView.swift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
@@ -39,13 +40,14 @@
 		1E2B143F2C67BAB300D420EB /* MacroTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroTextView.swift; sourceTree = "<group>"; };
 		1E714F7C2C68F95800BF6CA0 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		1E810B562BF139AE003C39E1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		1EB920592C713CD500485280 /* FoodListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodListView.swift; sourceTree = "<group>"; };
+		1EB9205B2C713E2200485280 /* FoodRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodRow.swift; sourceTree = "<group>"; };
 		1EE8B0D82BEFCFF3005C578A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		1EEE33F72C45A372009C2AEB /* NutrientTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientTrackingView.swift; sourceTree = "<group>"; };
 		1EEE33FA2C45A507009C2AEB /* BackendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendService.swift; sourceTree = "<group>"; };
 		1EEE34032C45AC7A009C2AEB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		1EEE340B2C45B464009C2AEB /* TargetProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetProgressViewStyle.swift; sourceTree = "<group>"; };
 		1EEE340D2C45B4EE009C2AEB /* TargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetView.swift; sourceTree = "<group>"; };
-		1EEE34142C45CBA6009C2AEB /* DaysListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysListView.swift; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frontend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -180,8 +182,8 @@
 			children = (
 				1EEE33F72C45A372009C2AEB /* NutrientTrackingView.swift */,
 				1E0904CF2C4028AC00615AC0 /* HomePageView.swift */,
-				1EEE34142C45CBA6009C2AEB /* DaysListView.swift */,
-				1E2B14372C67AEE700D420EB /* MacroView.swift */,
+				1EB920592C713CD500485280 /* FoodListView.swift */,
+				1EB9205B2C713E2200485280 /* FoodRow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -217,6 +219,7 @@
 				1E0904D12C4049C600615AC0 /* LoadingView.swift */,
 				1EEE340B2C45B464009C2AEB /* TargetProgressViewStyle.swift */,
 				1EEE340D2C45B4EE009C2AEB /* TargetView.swift */,
+				1E2B14372C67AEE700D420EB /* MacroView.swift */,
 				1E2B143F2C67BAB300D420EB /* MacroTextView.swift */,
 			);
 			path = Views;
@@ -389,13 +392,14 @@
 				1EEE340C2C45B464009C2AEB /* TargetProgressViewStyle.swift in Sources */,
 				1EEE340E2C45B4EE009C2AEB /* TargetView.swift in Sources */,
 				1EEE33F82C45A372009C2AEB /* NutrientTrackingView.swift in Sources */,
+				1EB9205A2C713CD500485280 /* FoodListView.swift in Sources */,
 				1E0904D02C4028AC00615AC0 /* HomePageView.swift in Sources */,
-				1EEE34152C45CBA6009C2AEB /* DaysListView.swift in Sources */,
 				1E0904D22C4049C600615AC0 /* LoadingView.swift in Sources */,
 				1E714F7D2C68F95800BF6CA0 /* DayView.swift in Sources */,
 				1EEE34042C45AC7A009C2AEB /* LoginViewModel.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				1E2B14382C67AEE700D420EB /* MacroView.swift in Sources */,
+				1EB9205C2C713E2200485280 /* FoodRow.swift in Sources */,
 				1E143D3E2C5FF3AD0048FBBE /* DayListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

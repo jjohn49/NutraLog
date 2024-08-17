@@ -7,28 +7,34 @@
 //
 
 import SwiftUI
+import Shared
 
 struct TargetView: View {
     
-    @EnvironmentObject var user: User
+    @Binding var userNutrients: UserNutrients
+    @Binding var userGoals: UserGoal
+    
+    var width: CGFloat = 100
     
     var body: some View {
-        GeometryReader{ geo in
-            ZStack{
-                ProgressView().progressViewStyle(TargetProgressViewStyle(lineWidth: 30, color: .red)).frame(width: geo.size.width * 0.9)
-                
-                ProgressView().progressViewStyle(TargetProgressViewStyle(lineWidth: 30, color: .blue)).frame(width: geo.size.width * 0.7)
-                
-                ProgressView().progressViewStyle(TargetProgressViewStyle(lineWidth: 30, color: .green)).frame(width: geo.size.width * 0.5)
-                
-                ProgressView().progressViewStyle(TargetProgressViewStyle(lineWidth: 30, color: .yellow)).frame(width: geo.size.width * 0.3)
-                
-            }.frame(width: geo.size.width)
+        
+        ZStack{
+            ProgressView(value: userNutrients.calories / Double(userGoals.calories)).progressViewStyle(TargetProgressViewStyle(lineWidth: width * 0.1, color: .red)).frame(width: width * 0.9)
+            
+            ProgressView(value: userNutrients.proteinGrams / Double(userGoals.proteinGrams)).progressViewStyle(TargetProgressViewStyle(lineWidth: width * 0.1, color: .blue)).frame(width: width * 0.7)
+            
+            ProgressView(value: userNutrients.carbGrams / Double(userGoals.carbGrams)).progressViewStyle(TargetProgressViewStyle(lineWidth: width * 0.1, color: .green)).frame(width: width * 0.5)
+            
+            ProgressView(value: userNutrients.fatGrams / Double(userGoals.fatGrams)).progressViewStyle(TargetProgressViewStyle(lineWidth: width * 0.1, color: .yellow)).frame(width: width * 0.3)
+            
         }
+        
         
     }
 }
 
 #Preview {
-    TargetView().environmentObject(User())
+    @State var nuts: UserNutrients = UserNutrients(calories: 500,proteinGrams: 0,carbGrams: 0,fatGrams: 0)
+    @State var goals: UserGoal = UserGoal(calories: 2000,proteinGrams: 200,carbGrams: 200,fatGrams: 100)
+    return TargetView(userNutrients: $nuts,userGoals: $goals)
 }

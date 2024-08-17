@@ -17,6 +17,8 @@ struct LoginView: View {
     
     @Binding var loading: Bool
     
+    @Binding var day: Day
+    
     
     var body: some View {
         
@@ -72,8 +74,15 @@ struct LoginView: View {
         loading = true
         Task{
             let response = try await viewModel.login()
-            
+
             if(try await user.set(response: response)){
+                
+                if(user.getDay(date: Date.now) == nil){
+                    try await user.createDayForToday()
+                }
+                
+                day = user.getDay(date: Date.now)!
+                
                 loading = false
             }else{
                 viewModel.failedLogin = true
@@ -89,8 +98,9 @@ struct LoginView: View {
 
 #Preview {
     @State var b = false
+    @State var d = Day(id: DayId(timestamp: 0, date: ""), userId: "", date: .init(year: 2024, monthNumber: 1, dayOfMonth: 1), foodsEaten: [])
     
-    return LoginView(loading: $b).environmentObject(User())
+    return LoginView(loading: $b, day: $d).environmentObject(User())
 }
 
 

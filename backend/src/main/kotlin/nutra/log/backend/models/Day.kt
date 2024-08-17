@@ -23,4 +23,11 @@ data class Day(
     val foodsEaten: ArrayList<FoodServing> = arrayListOf()
 )
 
+data class DayKMM(
+    val id: ObjectId,
+    val userId: String,
+    val date: LocalDate,
+    val foodsEaten: ArrayList<FoodServingKMM>
+)
+
 
