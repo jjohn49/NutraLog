@@ -17,36 +17,102 @@ struct NutrientTrackingView: View {
     @Binding var day: Day
     @State var userNut = UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     
+    
+    @State var showAddCustomFood: Bool = false
+    @State var showAddFoodBySearch: Bool = false
+    
     var body: some View {
-       
+        
         if #available(iOS 16.0, *) {
-            ZStack{
-                GeometryReader{ geo in
-                    NavigationStack{
-                        ScrollView{
-                            MacroView(userNut: $userNut, userGoals: $user.goals).padding()
-                            FoodListView(day: $day)
-                        }.navigationTitle("Today")
-                    }.onAppear(perform: {
-                        userNut = day.toUserNutrients()
-                    })
-                    
-                    Button(action: {
-                        print("Clicked")
-                    }, label: {
-                        ZStack{
-                            Circle().stroke(lineWidth: 5)
-                            Image(systemName: "plus")
-                        }
-                    }).position(x:geo.size.width/2,y:geo.size.height - 50).frame(width: 75, height: 75)
+            
+            NavigationStack{
+                ScrollView{
+                    MacroView(userNut: $userNut, userGoals: $user.goals).padding()
+                    FoodListView(day: $day)
+                }.navigationTitle("Today").toolbar{
+                    ToolbarItem{
+                        Menu(content: {
+                            Button(action: {
+                                showAddCustomFood = true
+                            }, label: {
+                                Text("Add Custom Food")
+                            })
+                            
+                            Button(action: {
+                                showAddFoodBySearch = true
+                            }, label: {
+                                Text("Add Food By Search")
+                            })
+                        }, label: {
+                            Text("Menu")
+                        })
+                    }
                 }
-            }
-        } else {
+            }.onAppear(perform: {
+                userNut = day.toUserNutrients()
+            }).sheet(isPresented: $showAddCustomFood, content: {
+                AddCustomFoodView()
+            }).sheet(isPresented: $showAddFoodBySearch, content: {
+                AddFoodBySearchView()
+            })
+        }else {
             // Fallback on earlier versions
+            //Update ya damn phone
             Text("Womp Womp")
         }
     }
+}
+
+struct AddFoodBySearchView: View {
     
+    @State var searchText: String = ""
+    var body: some View {
+        VStack{
+            Text("Add Food By Search").font(.title).bold()
+            
+            TextField("Search For Food",text: $searchText)
+        }
+    }
+}
+
+struct AddCustomFoodView: View {
+    @State var calories: Double = 0.0
+    @State var protein: Double = 0.0
+    @State var carbs: Double = 0.0
+    @State var fat: Double = 0.0
+    
+    @State var food: Food = Food(id: "", name: "", servingSize: "", calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0, brand: "")
+    
+    let formatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter
+        }()
+    
+    var body: some View {
+        VStack{
+            Text("Add Custom Food").font(.title).bold()
+            
+            TextField("Calories", value: $calories, formatter: formatter)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+            TextField("Protein", value: $protein, formatter: formatter)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+            TextField("Carbs", value: $carbs, formatter: formatter)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+            TextField("Fat", value: $fat, formatter: formatter)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding()
+            
+            Button(action: {
+                //submit
+            }, label: {
+                Text("Submit")
+            })
+        }
+    }
 }
 
 #Preview {
