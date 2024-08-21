@@ -14,7 +14,7 @@ struct HomePageView: View {
     
     @EnvironmentObject var user: User
     @State var loading: Bool = false
-    @State var day: Day = Day(id: DayId(timestamp: 0, date: ""), userId: "", date: .init(year: 2024, monthNumber: 1, dayOfMonth: 1), foodsEaten: [])
+    @State var day: Day = Day(id: DayId(timestamp: 0, date: ""), userId: "", date: .init(year: 2024, monthNumber: 1, dayOfMonth: 1), foodsEaten: [],userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
     
     var body: some View {
         
@@ -26,7 +26,7 @@ struct HomePageView: View {
             }
         }else{
             TabView{
-                NutrientTrackingView(day: $day).tabItem {
+                NutrientTrackingView().tabItem {
                     Text("Home")
                 }
                 CalendarView().tabItem {

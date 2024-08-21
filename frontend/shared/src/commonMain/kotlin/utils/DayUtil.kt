@@ -15,6 +15,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
+import models.Day
 import requests.AddFoodToDayRequest
 import requests.AuthenticatedRequest
 import requests.CreateDayRequest
@@ -39,11 +40,15 @@ class DayUtil {
     suspend fun getDaysForUser(req: AuthenticatedRequest): GetAllDaysResponse{
         val uri: String = "${backend_url}/day/get/all"
         println(req)
-        val response = client.get(urlString = uri) {
+        var response: List<Day> = client.get(urlString = uri) {
             header(HttpHeaders.Authorization, req.token)
-        }
+        }.body()
 
-        val ret = GetAllDaysResponse(true,response.body(),"Got All Days",null)
+        println(response)
+
+        response = response.map { d-> Day(d.id,d.userId,d.date,d.foodsEaten,d.toUserNutrients()) }
+
+        val ret = GetAllDaysResponse(true,response,"Got All Days",null)
         return ret
     }
 
@@ -61,8 +66,6 @@ class DayUtil {
 
     suspend fun CreateDay(auth: AuthenticatedRequest, req: CreateDayRequest): GetDayResponse{
         val uri: String = "${backend_url}/day/create"
-
-        println(req)
 
         val response = client.post(urlString = uri) {
             header(HttpHeaders.Authorization, auth.token)

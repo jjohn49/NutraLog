@@ -10,8 +10,7 @@ import SwiftUI
 import Shared
 
 struct FoodRow: View {
-    var foodServing: FoodServing
-    @State var stateFoodServ: FoodServing = FoodServing(numberOfServings: 1, food: Food(id: "", name: "", servingSize: "", calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0, brand: ""))
+    @Binding var foodServing: FoodServing
     @State var userNut: UserNutrients = UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     @EnvironmentObject var user: User
     
@@ -19,7 +18,7 @@ struct FoodRow: View {
     var body: some View {
         
         NavigationLink(destination: {
-            FoodDetailView(viewModel: FoodDetailViewModel(user: user, foodServing: stateFoodServ))
+            FoodDetailView(viewModel: FoodDetailViewModel(user: user, goals: $user.goals,foodServing: $foodServing, day: $user.currentDay))
         }, label: {
             HStack{
                 
@@ -30,12 +29,11 @@ struct FoodRow: View {
             }
         }).onAppear(perform: {
             userNut = foodServing.toUserNutrients()
-            stateFoodServ = foodServing
         })
     }
 }
 
 #Preview {
-    var foodServing: FoodServing = FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 1, brand: "Store Brand"))
-    return FoodRow(foodServing: foodServing).environmentObject(User())
+    @State var foodServing: FoodServing = FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 1, brand: "Store Brand"))
+    return FoodRow(foodServing: $foodServing).environmentObject(User())
 }

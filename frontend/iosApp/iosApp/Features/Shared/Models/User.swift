@@ -15,6 +15,7 @@ class User: ObservableObject{
     @Published var goals: UserGoal = UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
     @Published var nutrients: UserNutrients = UserNutrients(calories: 0.0, proteinGrams: 0.0, carbGrams: 0.0, fatGrams: 0.0)
     @Published var days: Array<Day> = []
+    @Published var currentDay: Day
     @Published var authenticatedRequest : AuthenticatedRequest = AuthenticatedRequest(token: "")
     
     let dayUtil: DayUtil = DayUtil()
@@ -29,7 +30,7 @@ class User: ObservableObject{
         self.nutrients = UserNutrients(calories: 0.0, proteinGrams: 0.0, carbGrams: 0.0, fatGrams: 0.0)
         self.days = []
         self.authenticatedRequest = AuthenticatedRequest(token: "")
-        
+        self.currentDay = Day(id: DayId(timestamp: 0,date: ""), userId: "", date: .init(year: 1, monthNumber: 1, dayOfMonth: 1), foodsEaten: [], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd"
     }

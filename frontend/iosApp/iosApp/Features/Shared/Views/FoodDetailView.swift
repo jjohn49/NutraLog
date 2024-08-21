@@ -20,7 +20,7 @@ struct FoodDetailView: View {
     var body: some View {
         
         VStack{
-            //TargetView(userNutrients: $viewModel.nutrients, userGoals: $viewModel.goals)
+            TargetView(userNutrients: $viewModel.nutrients, userGoals: $viewModel.goals)
             Text("Calories: \(String(format: "%.1f", viewModel.nutrients.calories))g")
             Text("Protein: \(String(format: "%.1f", viewModel.nutrients.proteinGrams))g")
             Text("Carbs: \(String(format: "%.1f", viewModel.nutrients.carbGrams))g")
@@ -45,21 +45,25 @@ class FoodDetailViewModel: ObservableObject{
     var user: User
     @Published var nutrients: UserNutrients
     @Published var numOfServigs: Double
-    @Published var goals: UserGoal
-    @Published var serving: FoodServing
+    @Binding var goals: UserGoal
+    @Binding var serving: FoodServing
+    @Binding var day: Day
     
     let util: DayUtil = DayUtil()
     
-    init(user: User, numOfServings: Double = 1.0, foodServing: FoodServing) {
+    init(user: User, numOfServings: Double = 1.0, goals: Binding<UserGoal>, foodServing: Binding<FoodServing>, day: Binding<Day>) {
         self.user = user
-        self.nutrients = foodServing.toUserNutrients()
+        self.nutrients = foodServing.wrappedValue.toUserNutrients()
         self.numOfServigs = numOfServings
-        self.goals = user.goals
-        self.serving = foodServing
+        self._goals = goals
+        self._serving = foodServing
+        self._day = day
     }
     
     func addFoodToToday(foodServing: FoodServing) async throws -> FoodServing?{
         let response = try await util.addFoodToDay(auth: user.authenticatedRequest, req: AddFoodToDayRequest(date: user.dateToKotlinDate(date: Date.now), foodServing: foodServing))
+        
+        day.addFoodServingToDay(foodServing: foodServing)
         
         return response.body
     }
@@ -73,6 +77,6 @@ class FoodDetailViewModel: ObservableObject{
 
 #Preview {
     @State var s: FoodServing = FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 2, brand: "Store Brand"))
-    let user: User = User()
-    return FoodDetailView(viewModel: FoodDetailViewModel(user: User(),foodServing: s))
+    @State var user: User = User()
+    return FoodDetailView(viewModel: FoodDetailViewModel(user: user,goals: $user.goals,foodServing: $s, day:$user.currentDay))
 }

@@ -1,8 +1,6 @@
 package nutra.log.backend.controllers
 
-import nutra.log.backend.models.FoodSearch
 import nutra.log.backend.models.OpenFoodFact
-import nutra.log.backend.models.OpenFoodFactSearch
 import nutra.log.backend.responses.FoodSearchResponse
 import nutra.log.backend.services.OpenFoodFactsService
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,10 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
 
 
 @RestController
@@ -23,7 +17,7 @@ class OpenFoodFactsController(@Autowired val openFoodFactsService: OpenFoodFacts
 
     @GetMapping("get/food/{code}")
     fun getFoodByCode(@PathVariable("code") code:String):OpenFoodFact{
-        return openFoodFactsService.getFoodByCode(code)
+        return openFoodFactsService.getOpenFoodFactByCode(code)
     }
 
     @GetMapping("get/search/{query}")

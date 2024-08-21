@@ -1,6 +1,7 @@
 package nutra.log.backend.controllers
 
 import nutra.log.backend.models.Day
+import nutra.log.backend.models.DayKMM
 import nutra.log.backend.models.Food
 import nutra.log.backend.requests.AddFoodToDayRequest
 import nutra.log.backend.requests.CreateDayRequest
@@ -36,8 +37,10 @@ class DayController(@Autowired val service: DayService) {
 
 
     @GetMapping("get/all")
-    fun getAllDays(authentication: Authentication): List<Day>{
-        return service.getAllDays(authentication)
+    fun getAllDays(authentication: Authentication): List<DayKMM>{
+        val ret = service.getAllDays(authentication)
+        println(ret)
+        return ret
     }
 
     @GetMapping("get")

@@ -14,10 +14,6 @@ import Shared
 struct NutrientTrackingView: View {
     
     @EnvironmentObject var user: User
-    @Binding var day: Day
-    @State var userNut = UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
-    
-    
     @State var showAddCustomFood: Bool = false
     @State var showAddFoodBySearch: Bool = false
     
@@ -27,8 +23,8 @@ struct NutrientTrackingView: View {
             
             NavigationStack{
                 ScrollView{
-                    MacroView(userNut: $userNut, userGoals: $user.goals).padding()
-                    FoodListView(day: $day)
+                    MacroView(userNut: $user.currentDay.userNutrients, userGoals: $user.goals).padding()
+                    FoodListView(day: $user.currentDay)
                 }.navigationTitle("Today").toolbar{
                     ToolbarItem{
                         Menu(content: {
@@ -47,10 +43,13 @@ struct NutrientTrackingView: View {
                             Text("Menu")
                         })
                     }
+                }.refreshable {
+                    Task{
+                        user.currentDay = user.getDay(date: Date.now)!
+                        print(user.currentDay)
+                    }
                 }
-            }.onAppear(perform: {
-                userNut = day.toUserNutrients()
-            }).sheet(isPresented: $showAddCustomFood, content: {
+            }.sheet(isPresented: $showAddCustomFood, content: {
                 AddCustomFoodView()
             }).sheet(isPresented: $showAddFoodBySearch, content: {
                 AddFoodBySearchView()
@@ -107,12 +106,12 @@ struct AddCustomFoodView: View {
     @State var d = Day(id: DayId(timestamp: 0, date: ""), userId: "", date: .init(year: 2024, monthNumber: 1, dayOfMonth: 1), foodsEaten: [
         FoodServing(numberOfServings: 1, food: Food(id: "1", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 2, brand: "Stop & shop")),
         FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 2, brand: "Stop & shop"))
-    ]
+    ], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     )
     
     
     
-    return NutrientTrackingView(day: $d).environmentObject(User())
+    return NutrientTrackingView().environmentObject(User())
     
     
 }

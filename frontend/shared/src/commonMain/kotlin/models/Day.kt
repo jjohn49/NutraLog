@@ -11,7 +11,8 @@ data class Day(
     val id: DayId,
     val userId: String = "",
     val date: LocalDate = Clock.System.now().toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault()).date,
-    val foodsEaten: ArrayList<FoodServing> = arrayListOf()
+    var foodsEaten: List<FoodServing> = mutableListOf(),
+    var userNutrients: UserNutrients = UserNutrients()
 ){
     fun toUserNutrients(): UserNutrients{
         var calories: Double = 0.0
@@ -32,6 +33,10 @@ data class Day(
         }
 
         return UserNutrients(calories, pro, carb, fat)
+    }
+
+    fun addFoodServingToDay(foodServing: FoodServing){
+        foodsEaten += foodServing
     }
 
     fun dateToString() : String {

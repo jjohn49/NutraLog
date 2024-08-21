@@ -14,7 +14,7 @@ struct AddFoodBySearchView: View {
     @StateObject var viewModel: AddFoodBySearchViewModel = AddFoodBySearchViewModel()
     
     @State var searchText: String = ""
-    @State var searchResult: [Food] = []
+    @State var searchResult: [FoodServing] = []
     
     var body: some View {
         NavigationView{
@@ -35,8 +35,8 @@ struct AddFoodBySearchView: View {
                 }
                 
                 ScrollView{
-                    ForEach(searchResult, id: \.id){ food in
-                        FoodRow(foodServing: FoodServing(numberOfServings: 1.0, food: food))
+                    ForEach($searchResult, id: \.self){ food in
+                        FoodRow(foodServing: food)
                     }
                 }
             }.padding(30)
@@ -47,14 +47,16 @@ struct AddFoodBySearchView: View {
 class AddFoodBySearchViewModel: ObservableObject{
     let util: FoodUtil = FoodUtil()
     
-    func getFoodBySearch(query: String) async -> [Food] {
-        var ret: [Food] = []
+    func getFoodBySearch(query: String) async -> [FoodServing] {
+        var ret: [FoodServing] = []
         let req = FoodSearchRequest(query: query)
         
         do{
             let response = try await util.getFoodBySearch(req: req)
             if response.success && response.body != nil{
-                ret = response.body!.products
+                ret = response.body!.products.map({ f in
+                    FoodServing(numberOfServings: 1, food: f)
+                })
             }else{
                 print("response was a success but couldn't store response body as return value")
             }
