@@ -23,8 +23,8 @@ struct NutrientTrackingView: View {
             
             NavigationStack{
                 ScrollView{
-                    MacroView(userNut: $user.currentDay.userNutrients, userGoals: $user.goals).padding()
-                    FoodListView(day: $user.currentDay)
+                    MacroView().padding()
+                    FoodListView()
                 }.navigationTitle("Today").toolbar{
                     ToolbarItem{
                         Menu(content: {
@@ -45,8 +45,9 @@ struct NutrientTrackingView: View {
                     }
                 }.refreshable {
                     Task{
-                        user.currentDay = user.getDay(date: Date.now)!
-                        print(user.currentDay)
+                        try await user.currentDay = user.getDayOnline(date: Date.now).body!
+                        user.updateUserNutrients()
+                        print(user.nutrients)
                     }
                 }
             }.sheet(isPresented: $showAddCustomFood, content: {

@@ -18,7 +18,7 @@ struct FoodRow: View {
     var body: some View {
         
         NavigationLink(destination: {
-            FoodDetailView(viewModel: FoodDetailViewModel(user: user, goals: $user.goals,foodServing: $foodServing, day: $user.currentDay))
+            FoodDetailView(foodServing: $foodServing)
         }, label: {
             HStack{
                 

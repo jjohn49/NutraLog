@@ -3,8 +3,8 @@ package nutra.log.backend.models
 import org.bson.types.ObjectId
 
 data class FoodServing(
-    val foodId: String = ObjectId.get().toString(),
-    val numberOfServings: Double,
+    var foodId: String = ObjectId.get().toString(),
+    var numberOfServings: Double,
 )
 
 data class FoodServingKMM(

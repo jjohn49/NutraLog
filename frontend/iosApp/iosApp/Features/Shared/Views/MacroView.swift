@@ -10,18 +10,18 @@ import SwiftUI
 import Shared
 
 struct MacroView: View {
-    @Binding var userNut: UserNutrients
-    @Binding var userGoals: UserGoal
+    @EnvironmentObject var user:User
+    
     var body: some View {
         
             VStack{
-                MacroTextView(text: "Calories", macro: userNut.calories, macroGoal: Double(userGoals.calories), color: .red).padding()
+                MacroTextView(text: "Calories", macro: $user.nutrients.calories, macroGoal: $user.goals.calories, color: .red).padding()
                 
-                MacroTextView(text: "Protein", macro: userNut.proteinGrams, macroGoal: Double(userGoals.proteinGrams), color: .blue).padding()
+                MacroTextView(text: "Protein", macro: $user.nutrients.proteinGrams, macroGoal: $user.goals.proteinGrams, color: .blue).padding()
                 
-                MacroTextView(text: "Carbs", macro: userNut.carbGrams, macroGoal: Double(userGoals.carbGrams), color: .green).padding()
+                MacroTextView(text: "Carbs", macro: $user.nutrients.carbGrams, macroGoal: $user.goals.carbGrams, color: .green).padding()
                 
-                MacroTextView(text: "Fat", macro: userNut.fatGrams, macroGoal: Double(userGoals.fatGrams), color: .yellow).padding()
+                MacroTextView(text: "Fat", macro: $user.nutrients.fatGrams, macroGoal: $user.goals.fatGrams, color: .yellow).padding()
                 
             }
         }
@@ -29,7 +29,5 @@ struct MacroView: View {
 
 
 #Preview {
-    @State var nut: UserNutrients = UserNutrients(calories: 100,proteinGrams: 0,carbGrams: 0,fatGrams: 0)
-    @State var goal: UserGoal = UserGoal(calories: 2000,proteinGrams: 200,carbGrams: 200,fatGrams: 100)
-    return MacroView(userNut: $nut, userGoals: $goal)
+    return MacroView().environmentObject(User())
 }

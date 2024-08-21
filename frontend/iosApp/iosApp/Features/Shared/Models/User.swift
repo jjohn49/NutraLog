@@ -35,6 +35,12 @@ class User: ObservableObject{
         dateFormatter.dateFormat = "yyyy-MM-dd"
     }
     
+    func addFoodServingToCurrentDay(foodServing: FoodServing) async throws{
+        currentDay.foodsEaten.append(foodServing)
+        updateUserNutrients()
+        try await dayUtil.addFoodToDay(auth: authenticatedRequest, req: AddFoodToDayRequest(date: currentDay.date, foodServing: foodServing))
+    }
+    
     func set(response:LogInResponse) async throws-> Bool{
         if response.success{
             self.username = response.body!.user.email
@@ -44,10 +50,17 @@ class User: ObservableObject{
             
             try await pullDays()
             
+            self.updateUserNutrients()
+            
             return true
         }
         
         return false
+    }
+    
+    func updateUserNutrients(){
+        print(currentDay.toUserNutrients())
+        nutrients = currentDay.toUserNutrients()
     }
     
     

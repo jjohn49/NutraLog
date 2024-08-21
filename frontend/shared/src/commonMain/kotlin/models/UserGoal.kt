@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserGoal(
-    val calories: Int = 2000,
-    val proteinGrams: Int = 200,
-    val carbGrams: Int = 200,
-    val fatGrams:Int = 100
+    var calories: Int = 2000,
+    var proteinGrams: Int = 200,
+    var carbGrams: Int = 200,
+    var fatGrams:Int = 100
 ){
 }

@@ -11,13 +11,13 @@ import SwiftUI
 struct MacroTextView: View {
     
     var text: String
-    var macro: Double
-    var macroGoal: Double
+    @Binding var macro: Double
+    @Binding var macroGoal: Int32
     let color: Color
     
     var body: some View {
         
-        ProgressView(value: macro / macroGoal, label: {
+        ProgressView(value: macro / Double(macroGoal), label: {
             Text("\(text): \(String(format:"%.1f",macro)) : \(String(format:"%.0f",macroGoal))").bold().foregroundStyle(color).font(.title)
         })
         
