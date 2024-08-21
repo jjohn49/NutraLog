@@ -2,8 +2,9 @@ package nutra.log.backend.controllers
 
 import nutra.log.backend.models.Day
 import nutra.log.backend.models.Food
-import nutra.log.backend.requests.AddFootToDayRequest
+import nutra.log.backend.requests.AddFoodToDayRequest
 import nutra.log.backend.requests.CreateDayRequest
+import nutra.log.backend.responses.AddFoodToDayResponse
 import nutra.log.backend.responses.GetDayResponse
 import nutra.log.backend.services.DayService
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,9 +29,9 @@ class DayController(@Autowired val service: DayService) {
     }
 
     @PutMapping("add/food")
-    fun addFood(authentication: Authentication, @RequestBody req: AddFootToDayRequest): Food{
-        service.addFoodToDay(authentication, req)
-        return req.food.toFood()
+    fun addFood(authentication: Authentication, @RequestBody req: AddFoodToDayRequest): ResponseEntity<AddFoodToDayResponse>{
+        return service.addFoodToDay(authentication, req)
+
     }
 
 

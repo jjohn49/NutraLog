@@ -9,7 +9,7 @@ data class Food(
 
     //This will be FDIC #
     @Id
-    val id: ObjectId,
+    val id: String = ObjectId.get().toString(),
     val name: String,
     val servingSize: String,
     val calories: Double?,
@@ -22,4 +22,12 @@ data class Food(
     //Leave all Optionals at the End
     val brand: String = ""
 
+)
+
+data class FoodSearch(
+    val count: Int?,
+    val page: Int,
+    val page_count: Int,
+    val page_size: Int,
+    val products: List<Food>
 )

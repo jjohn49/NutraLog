@@ -63,18 +63,6 @@ struct NutrientTrackingView: View {
     }
 }
 
-struct AddFoodBySearchView: View {
-    
-    @State var searchText: String = ""
-    var body: some View {
-        VStack{
-            Text("Add Food By Search").font(.title).bold()
-            
-            TextField("Search For Food",text: $searchText)
-        }
-    }
-}
-
 struct AddCustomFoodView: View {
     @State var calories: Double = 0.0
     @State var protein: Double = 0.0
@@ -117,7 +105,7 @@ struct AddCustomFoodView: View {
 
 #Preview {
     @State var d = Day(id: DayId(timestamp: 0, date: ""), userId: "", date: .init(year: 2024, monthNumber: 1, dayOfMonth: 1), foodsEaten: [
-        FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 2, brand: "Stop & shop")),
+        FoodServing(numberOfServings: 1, food: Food(id: "1", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 2, brand: "Stop & shop")),
         FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 2, brand: "Stop & shop"))
     ]
     )

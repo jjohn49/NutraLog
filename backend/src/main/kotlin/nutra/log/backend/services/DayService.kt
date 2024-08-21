@@ -2,15 +2,11 @@ package nutra.log.backend.services
 
 import nutra.log.backend.models.*
 import nutra.log.backend.repositories.DayRepository
-import nutra.log.backend.repositories.FoodRepository
-import nutra.log.backend.repositories.UserRepository
-import nutra.log.backend.requests.AddFootToDayRequest
-import nutra.log.backend.responses.GenericResponse
+import nutra.log.backend.requests.AddFoodToDayRequest
+import nutra.log.backend.responses.AddFoodToDayResponse
 import nutra.log.backend.responses.GetDayResponse
-import org.bson.types.ObjectId
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Example
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
@@ -38,19 +34,17 @@ class DayService(@Autowired val dayRepo: DayRepository) {
         }
     }
 
-    fun addFoodToDay(authentication: Authentication, req : AddFootToDayRequest): Day?{
+    fun addFoodToDay(authentication: Authentication, req : AddFoodToDayRequest): ResponseEntity<AddFoodToDayResponse>{
         val day = dayRepo.findDayByDateAndUserId(req.date, authentication.name)
 
-        val food = req.food.toFood()
-
-        day.foodsEaten.add(FoodServing(food.id, req.servings))
+        day.foodsEaten.add(req.foodServing.toFoodServing())
         dayRepo.save(day)
 
         userService.addDayToUser(authentication.name,day.id)
 
-        foodFactsService.saveFood(food)
+        foodFactsService.saveFood(req.foodServing.food)
 
-        return day
+        return ResponseEntity.ok(AddFoodToDayResponse(true,req.foodServing,"Added Food to Day ${req.date.toString()}",null))
     }
 
 

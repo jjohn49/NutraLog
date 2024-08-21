@@ -11,21 +11,27 @@ import Shared
 
 struct FoodRow: View {
     var foodServing: FoodServing
+    @State var stateFoodServ: FoodServing = FoodServing(numberOfServings: 1, food: Food(id: "", name: "", servingSize: "", calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0, brand: ""))
     @State var userNut: UserNutrients = UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     @EnvironmentObject var user: User
     
     
     var body: some View {
         
-        HStack(spacing: 50){
-            Text(foodServing.food.name)
-            Text("\(foodServing.numberOfServings.formatted(.number)) x \(foodServing.food.servingSize)")
-            TargetView(userNutrients: $userNut, userGoals: $user.goals, width: 75)
-            
-        }.onAppear(perform: {
+        NavigationLink(destination: {
+            FoodDetailView(viewModel: FoodDetailViewModel(user: user, foodServing: stateFoodServ))
+        }, label: {
+            HStack{
+                
+                Text(foodServing.food.name).frame(width: 200, alignment: .leading).fixedSize().lineLimit(1).padding(.leading)
+                Spacer()
+                TargetView(userNutrients: $userNut, userGoals: $user.goals,width: 75).padding(.trailing)
+                
+            }
+        }).onAppear(perform: {
             userNut = foodServing.toUserNutrients()
+            stateFoodServ = foodServing
         })
-        
     }
 }
 

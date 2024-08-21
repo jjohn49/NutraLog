@@ -1,15 +1,14 @@
 package nutra.log.backend.requests
 
-import nutra.log.backend.models.OpenFoodFact
+import nutra.log.backend.models.FoodServingKMM
 import java.time.LocalDate
 
 data class CreateDayRequest(
     val date: LocalDate
 )
-data class AddFootToDayRequest(
+data class AddFoodToDayRequest(
     val date: LocalDate,
-    val food: OpenFoodFact,
-    val servings: Double
+    val foodServing: FoodServingKMM
 )
 
 

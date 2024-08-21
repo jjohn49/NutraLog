@@ -18,7 +18,7 @@ data class OpenFoodFact(
     )
 
     fun toFood(): Food{
-        return Food(ObjectId(code), this.product.product_name, "", this.product.nutriments.energy_kcal,this.product.nutriments.proteins, this.product.nutriments.carbohydrates, this.product.nutriments.fat)
+        return Food(code, this.product.product_name, "", this.product.nutriments.energy_kcal,this.product.nutriments.proteins, this.product.nutriments.carbohydrates, this.product.nutriments.fat)
     }
 }
 
@@ -38,7 +38,11 @@ data class OpenFoodFactSearch(
         val product_name: String = "",
         val nutriments: Nutriments
     ){
-        fun toFood(): Food = Food(ObjectId(_id),product_name,"",nutriments.energy_kcal,nutriments.proteins,nutriments.carbohydrates,nutriments.fat)
+        fun toFood(): Food = Food(_id,product_name,"",nutriments.energy_kcal,nutriments.proteins,nutriments.carbohydrates,nutriments.fat)
+    }
+
+    fun toFoodSearch(): FoodSearch{
+        return FoodSearch(count, page, page_count, page_size, products.map { it.toFood() }.filter { f -> f.calories != null && f.proteinGrams != null && f.carbGrams != null && f.fatGrams !=null })
     }
 }
 

@@ -159,6 +159,10 @@ class User: ObservableObject{
         })
     }
     
+    func dateToKotlinDate(date: Date) -> Kotlinx_datetimeLocalDate{
+        return DayUtil.companion.createLocalDate(dateStr: dateFormatter.string(from: date))
+    }
+    
     
  
 }

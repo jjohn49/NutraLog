@@ -2,6 +2,7 @@ package response
 
 import kotlinx.serialization.Serializable
 import models.Day
+import models.FoodServing
 
 @Serializable
 data class GetAllDaysResponse(
@@ -18,3 +19,11 @@ data class GetDayResponse(
     override val message: String,
     override val request: String?
 ): GenericResponse<String?>
+
+@Serializable
+data class AddFoodToDayResponse(
+    override val success: Boolean,
+    override val body: FoodServing?,
+    override val message: String,
+    override val request: String?
+):GenericResponse<String?>

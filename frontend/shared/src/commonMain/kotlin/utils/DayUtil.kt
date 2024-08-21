@@ -7,16 +7,18 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
-import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
+import requests.AddFoodToDayRequest
 import requests.AuthenticatedRequest
 import requests.CreateDayRequest
+import response.AddFoodToDayResponse
 import response.GetDayResponse
 import response.GetAllDaysResponse
 
@@ -63,6 +65,18 @@ class DayUtil {
         println(req)
 
         val response = client.post(urlString = uri) {
+            header(HttpHeaders.Authorization, auth.token)
+            contentType(ContentType.Application.Json)
+            setBody(req)
+        }
+
+        return response.body()
+    }
+
+    suspend fun addFoodToDay(auth: AuthenticatedRequest, req: AddFoodToDayRequest): AddFoodToDayResponse {
+        val uri: String = "${backend_url}/day/add/food"
+
+        val response = client.put(urlString = uri){
             header(HttpHeaders.Authorization, auth.token)
             contentType(ContentType.Application.Json)
             setBody(req)

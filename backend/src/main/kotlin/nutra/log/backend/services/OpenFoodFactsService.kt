@@ -2,10 +2,14 @@ package nutra.log.backend.services
 
 import kotlinx.serialization.json.Json
 import nutra.log.backend.models.Food
+import nutra.log.backend.models.FoodSearch
 import nutra.log.backend.models.OpenFoodFact
 import nutra.log.backend.models.OpenFoodFactSearch
 import nutra.log.backend.repositories.FoodRepository
+import nutra.log.backend.responses.FoodSearchResponse
+import nutra.log.backend.responses.GenericResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.net.URI
 import java.net.http.HttpClient
@@ -34,13 +38,15 @@ class OpenFoodFactsService {
         return foodFacts
     }
 
-    fun getFoodBySearch(query: String):OpenFoodFactSearch{
+    fun getFoodBySearch(query: String):ResponseEntity<FoodSearchResponse>{
 
         val uri = "https://world.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1"
         val response = sendRequestTo(uri)
         val foodFacts = json.decodeFromString<OpenFoodFactSearch>(response.body())
 
-        return foodFacts
+        val foods: FoodSearch = foodFacts.toFoodSearch()
+
+        return ResponseEntity.ok(FoodSearchResponse(true, foodFacts.toFoodSearch(), "Got Search Results", null))
     }
 
     fun saveFood(food: Food){
