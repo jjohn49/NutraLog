@@ -9,7 +9,7 @@
 import Foundation
 import Shared
 
-class User: ObservableObject{
+@MainActor class User: ObservableObject{
     @Published var username: String = ""
     @Published var token :String = ""
     @Published var goals: UserGoal = UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
@@ -35,10 +35,15 @@ class User: ObservableObject{
         dateFormatter.dateFormat = "yyyy-MM-dd"
     }
     
-    func addFoodServingToCurrentDay(foodServing: FoodServing) async throws{
+    func addFoodServingToCurrentDay(foodServing: FoodServing) async {
         currentDay.foodsEaten.append(foodServing)
-        updateUserNutrients()
-        try await dayUtil.addFoodToDay(auth: authenticatedRequest, req: AddFoodToDayRequest(date: currentDay.date, foodServing: foodServing))
+        self.updateUserNutrients()
+        
+        do{
+            try await dayUtil.addFoodToDay(auth: authenticatedRequest, req: AddFoodToDayRequest(date: currentDay.date, foodServing: foodServing))
+        }catch {
+            print("Error sending to the backend")
+        }
     }
     
     func set(response:LogInResponse) async throws-> Bool{
@@ -48,7 +53,13 @@ class User: ObservableObject{
             self.goals = response.body!.user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
             self.authenticatedRequest = AuthenticatedRequest(token: response.body!.token)
             
-            try await pullDays()
+            
+            do{
+                await pullDays()
+                currentDay = days.first(where: {d in d.date == self.dateToKotlinDate(date: Date.now)})!
+            }catch {
+                print("Error pulliong days in set method")
+            }
             
             self.updateUserNutrients()
             
@@ -59,15 +70,12 @@ class User: ObservableObject{
     }
     
     func updateUserNutrients(){
-        print(currentDay.toUserNutrients())
-        nutrients = currentDay.toUserNutrients()
+        self.nutrients = self.currentDay.toUserNutrients()
     }
     
     
-    func refresh() async throws {
-        var r = try await pullUser()
-        
-        print(r)
+    func refresh() async {
+        var r = await pullUser()
         
         if r.success{
             if let user = r.user{
@@ -76,7 +84,7 @@ class User: ObservableObject{
             }
         }
         
-        try await pullDays()
+        await pullDays()
         
     }
     
@@ -127,21 +135,34 @@ class User: ObservableObject{
         return try await createDayForDate(date: Date.now)
     }
     
-    func pullUser() async throws -> UserResponse{
-        return try await userUtil.getUser(token: token)
+    func pullUser() async -> UserResponse{
+        
+        var response: UserResponse = UserResponse(success: false, user: nil, message: "Failed getting response")
+        
+        do{
+            response = try await userUtil.getUser(token: token)
+        } catch {
+            print("Error getting a response from: pullUser method")
+        }
+        
+        return response
     }
     
     func getAllDays() async throws -> GetAllDaysResponse{
         return try await dayUtil.getDaysForUser(req: authenticatedRequest)
     }
     
-    func pullDays() async throws{
-        days = try await getAllDays().body
+    func pullDays() async {
         
-        print(days)
+        do{
+            days = try await getAllDays().body
+        }catch {
+            print("Error pulling days")
+        }
+        
     }
     
-    func addDay(dateStr: String) async throws -> GetDayResponse {
+    func addDay(dateStr: String) async -> GetDayResponse {
         do{
             let response = try await dayUtil.CreateDay(auth: authenticatedRequest, req: CreateDayRequest(date: DayUtil.companion.createLocalDate(dateStr: dateStr)))
             
@@ -156,7 +177,7 @@ class User: ObservableObject{
     
     func addDay(date: Date) async throws -> GetDayResponse{
         print(dateFormatter.string(from: date))
-        return try await addDay(dateStr: dateFormatter.string(from: date))
+        return await addDay(dateStr: dateFormatter.string(from: date))
     }
     
     func getDayOnline(date: String) async throws -> GetDayResponse {

@@ -14,11 +14,13 @@ struct FoodRow: View {
     @State var userNut: UserNutrients = UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     @EnvironmentObject var user: User
     
+    var showFoodDetailAddButton: Bool = true
+    
     
     var body: some View {
         
         NavigationLink(destination: {
-            FoodDetailView(foodServing: $foodServing)
+            FoodDetailView(foodServing: $foodServing, showAddButton: showFoodDetailAddButton)
         }, label: {
             HStack{
                 

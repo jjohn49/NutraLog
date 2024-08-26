@@ -30,15 +30,14 @@ class RequestUtil {
 
      suspend fun sendLoginRequest(req: LogInRequest): LogInResponse{
         val uri: String = "${backend_url}/auth/login"
-
-         println(req)
+         //println(req)
 
         val response: LogInResponse = client.post(uri){
             contentType(ContentType.Application.Json)
             setBody(req)
         }.body()
 
-         println(response)
+         //println(response)
 
         return response
     }

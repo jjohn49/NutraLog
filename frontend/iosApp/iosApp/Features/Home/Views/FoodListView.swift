@@ -18,7 +18,7 @@ struct FoodListView: View {
         VStack(spacing: 20){
             Text("Today's Food").bold().font(.title2)
             ForEach($user.currentDay.foodsEaten, id: \.self){serving in
-                FoodRow(foodServing: serving)
+                FoodRow(foodServing: serving, showFoodDetailAddButton: false)
             }
         }
     

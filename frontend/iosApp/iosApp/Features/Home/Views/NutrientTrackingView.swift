@@ -64,12 +64,9 @@ struct NutrientTrackingView: View {
 }
 
 struct AddCustomFoodView: View {
-    @State var calories: Double = 0.0
-    @State var protein: Double = 0.0
-    @State var carbs: Double = 0.0
-    @State var fat: Double = 0.0
+    @EnvironmentObject var user: User
     
-    @State var food: Food = Food(id: "", name: "", servingSize: "", calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0, brand: "")
+    @State var foodServing: FoodServing = FoodServing(numberOfServings: 1.0, food: Food(id: "", name: "", servingSize: "", calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0, brand: ""))
     
     let formatter: NumberFormatter = {
             let formatter = NumberFormatter()
@@ -81,21 +78,25 @@ struct AddCustomFoodView: View {
         VStack{
             Text("Add Custom Food").font(.title).bold()
             
-            TextField("Calories", value: $calories, formatter: formatter)
+            TextField("Name", text: $foodServing.food.name)
+            
+            TextField("Calories", value: $foodServing.food.calories, formatter: formatter)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding()
-            TextField("Protein", value: $protein, formatter: formatter)
+            TextField("Protein", value: $foodServing.food.proteinGrams, formatter: formatter)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding()
-            TextField("Carbs", value: $carbs, formatter: formatter)
+            TextField("Carbs", value: $foodServing.food.carbGrams, formatter: formatter)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding()
-            TextField("Fat", value: $fat, formatter: formatter)
+            TextField("Fat", value: $foodServing.food.fatGrams, formatter: formatter)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding()
             
             Button(action: {
-                //submit
+                Task{
+                    await user.addFoodServingToCurrentDay(foodServing: foodServing)
+                }
             }, label: {
                 Text("Submit")
             })

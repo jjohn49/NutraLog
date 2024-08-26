@@ -73,8 +73,8 @@ struct LoginView: View {
     func logInButtonAction() {
         loading = true
         Task{
-            let response = try await viewModel.login()
-            print(response)
+            let response = await viewModel.login()
+            //print(response)
             if(try await user.set(response: response)){
                 if(user.getDay(date: Date.now) == nil){
                     try await user.createDayForToday()

@@ -20,9 +20,16 @@ class LoginViewModel: ObservableObject {
     
     let reqUtil: RequestUtil = RequestUtil()
     
-    func login() async throws -> LogInResponse{
-        //print("Sending to Backend")
-        return try await reqUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
+    func login() async -> LogInResponse{
+        var response: LogInResponse = LogInResponse(success: false, body: nil, message: "Failed to login", request: nil)
+        
+        do{
+            response =  try await reqUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
+        } catch {
+            print(response.message)
+        }
+        
+        return response
     }
     
     

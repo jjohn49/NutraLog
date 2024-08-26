@@ -26,7 +26,7 @@ struct HomePageView: View {
             }
         }else{
             TabView{
-                NutrientTrackingView().tabItem {
+                NutrientTrackingView().environmentObject(self.user).tabItem {
                     Text("Home")
                 }
                 CalendarView().tabItem {
