@@ -30,7 +30,7 @@ import Shared
         self.nutrients = UserNutrients(calories: 0.0, proteinGrams: 0.0, carbGrams: 0.0, fatGrams: 0.0)
         self.days = []
         self.authenticatedRequest = AuthenticatedRequest(token: "")
-        self.currentDay = Day(id: DayId(timestamp: 0,date: ""), userId: "", date: .init(year: 1, monthNumber: 1, dayOfMonth: 1), foodsEaten: [], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
+        self.currentDay = Day(id: "", userId: "", date: .init(year: 1, monthNumber: 1, dayOfMonth: 1), foodsEaten: [], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd"
     }
@@ -52,14 +52,14 @@ import Shared
             self.token = response.body!.token
             self.goals = response.body!.user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
             self.authenticatedRequest = AuthenticatedRequest(token: response.body!.token)
+            self.days = response.body!.user.days
             
-            
-            do{
-                await pullDays()
-                currentDay = days.first(where: {d in d.date == self.dateToKotlinDate(date: Date.now)})!
-            }catch {
-                print("Error pulliong days in set method")
+            if !wasDayCreatedAlready(date: Date.now) {
+                await createDayForToday()
             }
+            
+            currentDay = days.first(where: {d in d.date == self.dateToKotlinDate(date: Date.now)})!
+            
             
             self.updateUserNutrients()
             
@@ -75,16 +75,16 @@ import Shared
     
     
     func refresh() async {
-        var r = await pullUser()
+        let r = await pullUser()
         
         if r.success{
             if let user = r.user{
                 username = user.id
                 goals = user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
+                days = user.days
+                self.updateUserNutrients()
             }
         }
-        
-        await pullDays()
         
     }
     
@@ -111,7 +111,7 @@ import Shared
         } )
     }
     
-    func createDayForDate(date: Date) async throws{
+    func createDayForDate(date: Date) async {
         if !self.wasDayCreatedAlready(date: date) {
             
             do{
@@ -131,8 +131,8 @@ import Shared
     }
     
     //Creates a new Day OBJ for today if it doesn't already exist
-    func createDayForToday() async throws{
-        return try await createDayForDate(date: Date.now)
+    func createDayForToday() async {
+        return await createDayForDate(date: Date.now)
     }
     
     func pullUser() async -> UserResponse{
@@ -166,7 +166,7 @@ import Shared
         do{
             let response = try await dayUtil.CreateDay(auth: authenticatedRequest, req: CreateDayRequest(date: DayUtil.companion.createLocalDate(dateStr: dateStr)))
             
-            try await self.refresh()
+            await self.refresh()
             return response
         } catch {
             print("Error sending add day to backend")

@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Day(
-    val id: DayId,
+    val id: String = "",
     val userId: String = "",
     val date: LocalDate = Clock.System.now().toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault()).date,
     var foodsEaten: List<FoodServing> = mutableListOf(),
@@ -45,7 +45,7 @@ data class Day(
 
     companion object{
         fun getEmptyDay(): Day {
-            return Day(DayId(0,""))
+            return Day("")
         }
     }
 }

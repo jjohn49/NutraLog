@@ -15,5 +15,5 @@ interface DayRepository : MongoRepository<Day, String> {
 
     fun findDayByDateAndUserId(date: LocalDate, userId: String): Day
 
-    fun findDayByDateAndId(date: LocalDate, id: ObjectId): Day
+    fun findDayByDateAndId(date: LocalDate, id: String): Day
 }

@@ -35,7 +35,7 @@ class UserController {
     @GetMapping("get")
     fun getUser(authentication: Authentication):ResponseEntity<*>{
         val user = userService.findById(authentication.name)
-        return ResponseEntity.ok<Any>(UserResponse(true, user, "Successfully Authenticated User"))
+        return ResponseEntity.ok(UserResponse(true, user, "Successfully Authenticated User"))
     }
 
     @PutMapping("set/goals")

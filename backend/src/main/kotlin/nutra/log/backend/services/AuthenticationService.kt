@@ -5,7 +5,6 @@ import nutra.log.backend.models.User
 import nutra.log.backend.requests.LogInRequest
 import nutra.log.backend.requests.RegisterUserRequest
 import nutra.log.backend.responses.BackendResponse
-import nutra.log.backend.responses.LogInBody
 import nutra.log.backend.responses.LogInResponse
 import nutra.log.backend.responses.SuccessfulLoginResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,7 +45,8 @@ class AuthenticationService {
 
             val user: User = userService.findById(logInRequest.username)
             val accessToken = tokenService.createToken(userService.findById(logInRequest.username))
-            return ResponseEntity.ok(LogInResponse(true, LogInBody(accessToken, user),"Successful Login.", logInRequest))
+            return ResponseEntity.ok(LogInResponse(true,
+                LogInResponse.LogInBody(accessToken, user),"Successful Login.", logInRequest))
         }catch (e: Exception){
             return ResponseEntity.ok(LogInResponse(false,null,"Failed Login.", logInRequest))
         }

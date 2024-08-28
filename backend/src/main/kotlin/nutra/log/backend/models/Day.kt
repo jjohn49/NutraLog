@@ -1,33 +1,35 @@
 package nutra.log.backend.models
 
-import com.mongodb.DBRef
+import kotlinx.serialization.Serializable
+import nutra.log.backend.serializers.LocalDateSerializer
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
-import org.springframework.data.annotation.ReadOnlyProperty
-import org.springframework.data.annotation.Reference
 import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.DocumentReference
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
 
-@Document("day")
+//@Document("day")
+//data class Day(
+//    @Id
+//    val id: ObjectId = ObjectId(),
+//
+//    val userId: String,
+//
+//    val date: LocalDate = LocalDate.now(),
+//
+//    var foodsEaten: List<FoodServing> = mutableListOf()
+//)
+
+
+
+@Document("Day")
+@Serializable
 data class Day(
     @Id
-    val id: ObjectId = ObjectId(),
-
+    val id: String = ObjectId.get().toString(),
     val userId: String,
-
-    val date: LocalDate = LocalDate.now(),
-
-    var foodsEaten: List<FoodServing> = mutableListOf()
-)
-
-data class DayKMM(
-    val id: ObjectId,
-    val userId: String,
+    @Serializable(with = LocalDateSerializer::class)
     val date: LocalDate,
-    val foodsEaten: List<FoodServingKMM>
+    var foodsEaten: List<FoodServing> = listOf()
 )
 
 

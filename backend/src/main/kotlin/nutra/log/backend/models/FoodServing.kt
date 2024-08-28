@@ -1,17 +1,12 @@
 package nutra.log.backend.models
 
+import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
+import org.springframework.data.mongodb.core.mapping.DBRef
 
+@Serializable
 data class FoodServing(
-    var foodId: String = ObjectId.get().toString(),
-    var numberOfServings: Double,
-)
-
-data class FoodServingKMM(
+    @DBRef
     val food: Food,
     val numberOfServings: Double
-){
-    fun toFoodServing(): FoodServing{
-        return FoodServing(food.id, numberOfServings)
-    }
-}
+)

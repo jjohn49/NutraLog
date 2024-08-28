@@ -1,10 +1,12 @@
 package nutra.log.backend.models
 
+import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
-@Document("food")
+@Document("Food")
+@Serializable
 data class Food(
 
     //This will be FDIC #
@@ -24,10 +26,3 @@ data class Food(
 
 )
 
-data class FoodSearch(
-    val count: Int?,
-    val page: Int,
-    val page_count: Int,
-    val page_size: Int,
-    val products: List<Food>
-)

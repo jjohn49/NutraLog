@@ -8,5 +8,5 @@ data class UserKMM(
     var email:String,
     var password:String,
     var userGoals: UserGoal? = null,
-    var days: ArrayList<String> = arrayListOf()
+    var days: List<Day> = listOf()
 )

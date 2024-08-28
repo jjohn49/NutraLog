@@ -1,6 +1,7 @@
 package nutra.log.backend.services
 
 import nutra.log.backend.exceptions.UserAlreadyExistsException
+import nutra.log.backend.models.Day
 import nutra.log.backend.models.User
 import nutra.log.backend.repositories.UserRepository
 import org.bson.types.ObjectId
@@ -22,11 +23,11 @@ class UserService(@Autowired val repo: UserRepository) {
         repo.insert(user)
     }
 
-    fun addDayToUser(userId: String, dayId:ObjectId){
-        val user = this.findById(userId)
+    fun addDayToUser(authentication: Authentication, day: Day){
+        val user: User = repo.findById(authentication.name).orElseThrow()
 
-        if(!user.days.contains(dayId.toString())){
-            user.days.add(dayId.toString())
+        if(!user.days.contains(day)){
+            user.days += day
             repo.save(user)
         }
     }
