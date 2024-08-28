@@ -111,9 +111,11 @@ struct AddCustomFoodView: View {
     ], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     )
     
+    var user: User = User()
+    user.currentDay = d
     
     
-    return NutrientTrackingView().environmentObject(User())
+    return NutrientTrackingView().environmentObject(user)
     
     
 }

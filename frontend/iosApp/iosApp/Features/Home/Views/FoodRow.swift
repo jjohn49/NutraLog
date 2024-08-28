@@ -18,7 +18,8 @@ struct FoodRow: View {
     
     
     var body: some View {
-        
+        HStack{
+            
         NavigationLink(destination: {
             FoodDetailView(foodServing: $foodServing, showAddButton: showFoodDetailAddButton)
         }, label: {
@@ -26,12 +27,18 @@ struct FoodRow: View {
                 
                 Text(foodServing.food.name).frame(width: 200, alignment: .leading).fixedSize().lineLimit(1).padding(.leading)
                 Spacer()
-                TargetView(userNutrients: $userNut, userGoals: $user.goals,width: 75).padding(.trailing)
+    
                 
             }
-        }).onAppear(perform: {
-            userNut = foodServing.toUserNutrients()
         })
+            
+            TargetView(userNutrients: $userNut, userGoals: $user.goals,width: 75).padding(.trailing)
+            
+        }.onAppear(perform: {
+            userNut = foodServing.toUserNutrients()
+        }).onDelete {
+            print("Delete \(foodServing.food.name)")
+        }
     }
 }
 

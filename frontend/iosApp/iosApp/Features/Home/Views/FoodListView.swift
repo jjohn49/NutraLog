@@ -15,11 +15,15 @@ struct FoodListView: View {
     
     var body: some View {
         
-        VStack(spacing: 20){
+        LazyVStack{
             Text("Today's Food").bold().font(.title2)
+            
+            
             ForEach($user.currentDay.foodsEaten, id: \.self){serving in
                 FoodRow(foodServing: serving, showFoodDetailAddButton: false)
             }
+            
+            
         }
     
     }
@@ -29,5 +33,18 @@ struct FoodListView: View {
 
 #Preview {
     
-    return FoodListView().environmentObject(User())
+    var user: User = User()
+    
+    var food: Food = Food(id: "Chicken", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 1, brand: "Store")
+    
+    var foodsEaten: [FoodServing] = [
+        FoodServing(numberOfServings: 1, food: food),
+        FoodServing(numberOfServings: 1, food: food),
+        FoodServing(numberOfServings: 1, food: food),
+        FoodServing(numberOfServings: 1, food: food)
+    ]
+    
+    user.currentDay = Day(id: "", userId: "", date: user.dateToKotlinDate(date: Date.now), foodsEaten: foodsEaten, userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
+    
+    return FoodListView().environmentObject(user)
 }
