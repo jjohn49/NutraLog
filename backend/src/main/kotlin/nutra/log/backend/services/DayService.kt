@@ -7,10 +7,12 @@ import nutra.log.backend.responses.AddFoodToDayResponse
 import nutra.log.backend.responses.GetDayResponse
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.util.Date
 import kotlin.Exception
 
 @Service
@@ -23,66 +25,78 @@ class DayService(@Autowired val dayRepo: DayRepository) {
     @Autowired
     private lateinit var foodFactsService: OpenFoodFactsService
 
-    fun addDay(authentication: Authentication, day: Day): ResponseEntity<GetDayResponse>{
-        return try {
-            if (!dayRepo.findById(day.id.toString()).isPresent) {
-                dayRepo.insert(day)
-                userService.addDayToUser(authentication, day)
-                ResponseEntity.ok(GetDayResponse(true,day,"Succesfully added day to user ${authentication.name}",null ))
-            }else{
-                ResponseEntity.ok(GetDayResponse(true,day,"Day Already Exists",null))
+    fun addDay(authentication: Authentication, day: Day): ResponseEntity<*>{
+
+        return try{
+            if (dayRepo.existsByDateAndUserId(day.date,authentication.name)){
+                throw Exception()
             }
 
-
-
-        } catch(e: Exception){
-            ResponseEntity.ok(GetDayResponse(false, null, "Couldn't Add Day",null))
+            dayRepo.insert(day)
+            userService.addDayToUser(authentication, day)
+            ResponseEntity.ok(day)
+        }catch (e: Exception){
+            ResponseEntity.badRequest().body<String>("Failed to create day for date: ${day.date} for user: ${authentication.name}")
         }
     }
 
-    fun addFoodToDay(authentication: Authentication, req : AddFoodToDayRequest): ResponseEntity<AddFoodToDayResponse>{
-        val day = dayRepo.findDayByDateAndUserId(req.date, authentication.name)
+    fun addFoodToDay(authentication: Authentication, req : AddFoodToDayRequest): ResponseEntity<FoodServing>{
 
-        day.foodsEaten = day.foodsEaten + req.foodServing
-        dayRepo.save(day)
+        return try {
+            val day = dayRepo.findDayByDateAndUserId(req.date, authentication.name).orElseThrow()
+            day.foodsEaten = day.foodsEaten + req.foodServing
+            dayRepo.save(day)
+            foodFactsService.saveFood(req.foodServing.food)
+            ResponseEntity.ok(req.foodServing)
+        }catch (e: NoSuchElementException){
+            ResponseEntity.notFound().build()
+        }
 
-
-        foodFactsService.saveFood(req.foodServing.food)
-
-        return ResponseEntity.ok(AddFoodToDayResponse(true,req.foodServing,"Added Food to Day ${req.date.toString()}",null))
     }
 
-
-//    fun deleteFoodFromDay(food: FoodServing, dayId: String){
-//        val day = dayRepo.findById(dayId)
-//
-//        day.ifPresent {
-//            it.foodsEaten -= food
-//        }
-//    }
-
-    fun getAllDays(authentication: Authentication): List<Day>{
-        val days = dayRepo.findAllByUserId(authentication.name)
-        return days
-    }
-
-    fun getDay(authentication: Authentication, dateStr: String): ResponseEntity<GetDayResponse>{
-        val date: LocalDate = LocalDate.parse(dateStr)
-
-        try {
-            val day: Day = dayRepo.findDayByDateAndUserId(date, authentication.name)
-            return ResponseEntity.ok(GetDayResponse(true,day,"Found Day",null))
-        } catch (e: Exception){
-            return ResponseEntity.badRequest().build()
+    fun updateFoodFromDay(oldFood: FoodServing, newFood: FoodServing, dayId: String): ResponseEntity<Day>{
+        return try {
+            val day = dayRepo.findById(dayId).orElseThrow()
+            day.foodsEaten -= oldFood
+            day.foodsEaten += newFood
+            ResponseEntity.ok(day)
+        }catch (e: NoSuchElementException){
+            ResponseEntity.notFound().build()
         }
     }
 
-//    fun dayToDayKMM(day: Day): DayKMM{
-//        val foodServings: ArrayList<FoodServingKMM> = arrayListOf()
-//        day.foodsEaten.forEach {serving ->
-//            foodServings.add(FoodServingKMM(foodFactsService.getOpenFoodFactByCode(serving.foodId.toString()).toFood(),serving.numberOfServings))
-//        }
-//
-//        return DayKMM(day.id.toString(),day.userId,day.date,foodServings)
-//    }
+    fun deleteFoodFromDay(authentication: Authentication ,food: FoodServing, dayId: String): ResponseEntity<Day>{
+
+        //getting the day from  repo to make sure it is the correct info
+        return try {
+            val day: Day = dayRepo.findDayByIdAndUserId(id = dayId, userId = authentication.name).orElseThrow()
+            day.foodsEaten -= food
+            dayRepo.save(day)
+            ResponseEntity.ok(day)
+        }catch (exception: NoSuchElementException){
+            ResponseEntity.notFound().build()
+        }
+    }
+
+    fun getAllDays(authentication: Authentication): ResponseEntity<List<Day>>{
+        return try {
+            val days = dayRepo.findAllByUserId(authentication.name).orElseThrow()
+            ResponseEntity.ok(days)
+        }catch (e: NoSuchElementException){
+            ResponseEntity.notFound().build()
+        }
+
+    }
+
+    fun getDay(authentication: Authentication, date: LocalDate): ResponseEntity<Day>{
+
+        return try {
+            val day: Day = dayRepo.findDayByDateAndUserId(date, authentication.name).orElseThrow()
+            ResponseEntity.ok(day)
+        } catch (e: NoSuchElementException){
+            ResponseEntity.notFound().build()
+        }
+    }
+
+
 }

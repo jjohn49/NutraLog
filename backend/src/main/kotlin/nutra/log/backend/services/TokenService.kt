@@ -9,7 +9,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.Optional
 
 /**
  * This service creates and parses tokens.
@@ -35,6 +34,6 @@ class TokenService(
     fun parseToken(token: String): User {
         val jwt = jwtDecoder.decode(token)
         val userId = jwt.claims["userId"] as String
-        return userService.findById(userId)
+        return userService.findById(userId).get()
     }
 }

@@ -27,3 +27,11 @@ data class AddFoodToDayResponse(
     override val message: String,
     override val request: String?
 ):GenericResponse<String?>
+
+@Serializable
+data class DeleteFoodFromDayResponse(
+    override val success: Boolean,
+    override val body: Day?,
+    override val message: String,
+    override val request: String?
+):GenericResponse<String?>

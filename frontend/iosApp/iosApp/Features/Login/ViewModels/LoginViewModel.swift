@@ -18,13 +18,13 @@ class LoginViewModel: ObservableObject {
     @Published var keepSignedIn: Bool = false
     
     
-    let reqUtil: RequestUtil = RequestUtil()
+    let authUtil: AuthUtil = AuthUtil()
     
     func login() async -> LogInResponse{
         var response: LogInResponse = LogInResponse(success: false, body: nil, message: "Failed to login", request: nil)
         
         do{
-            response =  try await reqUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
+            response =  try await authUtil.sendLoginRequest(req: LogInRequest(username: username, password: password))
         } catch {
             print(response.message)
         }

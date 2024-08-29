@@ -46,6 +46,17 @@ import Shared
         }
     }
     
+    func deleteFoodServingForCurrentDay(index: Int) async {
+        let foodToDelete = currentDay.foodsEaten.remove(at: index)
+        self.updateUserNutrients()
+        
+        do{
+            try await dayUtil.deleteFoodFromDay(auth: authenticatedRequest, req: DeleteFoodFromDayRequest(dayId: currentDay.id, foodServing: foodToDelete))
+        }catch {
+            print("Error trying to delete \(foodToDelete.food.name) from current day \(currentDay.date)")
+        }
+    }
+    
     func set(response:LogInResponse) async throws-> Bool{
         if response.success{
             self.username = response.body!.user.email

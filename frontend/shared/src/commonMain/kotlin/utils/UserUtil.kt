@@ -7,6 +7,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.auth.parseAuthorizationHeader
@@ -35,12 +36,14 @@ class UserUtil {
     suspend fun getUser(token: String): UserResponse{
         val uri: String = "${backend_url}/user/get"
 
-        println(token)
-
-        val response: UserResponse = client.get(uri){
+        val response: HttpResponse = client.get(uri){
             header(HttpHeaders.Authorization, token)
-        }.body()
+        }
 
-        return response
+        return if (response.status.value in 200..299){
+            UserResponse(true,response.body(),"Got User Details")
+        }else{
+            UserResponse(false,null,"Failed to get User Details")
+        }
     }
 }

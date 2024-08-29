@@ -19,8 +19,12 @@ struct FoodListView: View {
             Text("Today's Food").bold().font(.title2)
             
             
-            ForEach($user.currentDay.foodsEaten, id: \.self){serving in
-                FoodRow(foodServing: serving, showFoodDetailAddButton: false)
+            ForEach(Array($user.currentDay.foodsEaten.enumerated()), id: \.offset){index, serving in
+                FoodRow(index: index, foodServing: serving, showFoodDetailAddButton: false).onDelete {
+                    Task{
+                        await user.deleteFoodServingForCurrentDay(index:index)
+                    }
+                }
             }
             
             

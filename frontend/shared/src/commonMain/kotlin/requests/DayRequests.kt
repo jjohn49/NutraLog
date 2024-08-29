@@ -14,3 +14,9 @@ data class AddFoodToDayRequest(
     val date: LocalDate,
     val foodServing: FoodServing
 )
+
+@Serializable
+data class DeleteFoodFromDayRequest(
+    val dayId: String,
+    val foodServing: FoodServing,
+)

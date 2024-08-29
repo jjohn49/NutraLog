@@ -1,14 +1,11 @@
 package nutra.log.backend.services
 
-import nutra.log.backend.exceptions.UserAlreadyExistsException
 import nutra.log.backend.models.User
 import nutra.log.backend.requests.LogInRequest
 import nutra.log.backend.requests.RegisterUserRequest
-import nutra.log.backend.responses.BackendResponse
 import nutra.log.backend.responses.LogInResponse
-import nutra.log.backend.responses.SuccessfulLoginResponse
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.RequestEntity
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -33,9 +30,9 @@ class AuthenticationService {
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager
 
-    fun authenticate(logInRequest: LogInRequest): ResponseEntity<*>{
+    fun authenticate(logInRequest: LogInRequest): ResponseEntity<LogInResponse.LogInBody>{
 
-        try {
+        return try {
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
                     logInRequest.username,
@@ -43,12 +40,13 @@ class AuthenticationService {
                 )
             )
 
-            val user: User = userService.findById(logInRequest.username)
-            val accessToken = tokenService.createToken(userService.findById(logInRequest.username))
-            return ResponseEntity.ok(LogInResponse(true,
-                LogInResponse.LogInBody(accessToken, user),"Successful Login.", logInRequest))
-        }catch (e: Exception){
-            return ResponseEntity.ok(LogInResponse(false,null,"Failed Login.", logInRequest))
+            val user: User = userService.findById(logInRequest.username).orElseThrow()
+            val accessToken = tokenService.createToken(user)
+            ResponseEntity.ok(LogInResponse.LogInBody(accessToken, user))
+        }catch (e: NoSuchElementException){
+            ResponseEntity.notFound().build()
+        } catch (e: Exception){
+            ResponseEntity.badRequest().build()
         }
 
     }
@@ -58,14 +56,7 @@ class AuthenticationService {
 
         val newUser = User(registerUserRequest.id, email = registerUserRequest.email, password = hashedPassword)
 
-        try{
-            newUser.let { userService.addUser(user = newUser) }
-        }catch (e: UserAlreadyExistsException){
-            return ResponseEntity.ok(BackendResponse(false,e.message.toString()))
-        }
-
-
-        return ResponseEntity.ok<Any>(BackendResponse(true,"Created New User For Email: ${registerUserRequest.email}"))
+        return userService.addUser(newUser)
     }
 
 }

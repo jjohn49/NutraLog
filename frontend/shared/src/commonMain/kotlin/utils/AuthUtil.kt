@@ -6,7 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -15,7 +15,7 @@ import requests.LogInRequest
 import response.LogInBody
 import response.LogInResponse
 
-class RequestUtil {
+class AuthUtil {
 
     private val backend_url = BuildKonfig.BACKEND_URL
 
@@ -31,12 +31,17 @@ class RequestUtil {
      suspend fun sendLoginRequest(req: LogInRequest): LogInResponse{
         val uri: String = "${backend_url}/auth/login"
 
-        val response: LogInResponse = client.post(uri){
+        val response: HttpResponse = client.post(uri){
             contentType(ContentType.Application.Json)
             setBody(req)
-        }.body()
+        }
 
+         return if(response.status.value in 200..299){
+             val body: LogInBody = response.body()
+             LogInResponse(true,body,"Successful Login",null)
+         }else{
+             LogInResponse(false,null,"Failed to Login",null)
+         }
 
-        return response
     }
 }

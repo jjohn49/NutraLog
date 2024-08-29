@@ -69,11 +69,11 @@ struct Delete: ViewModifier {
                         }
                     }
             )
-            .animation(.interactiveSpring())
+            .animation(.interactiveSpring(), value: 10)
     }
     
     private func delete() {
-        offset.width = -contentWidth
+        offset.width = .zero
         action()
     }
     

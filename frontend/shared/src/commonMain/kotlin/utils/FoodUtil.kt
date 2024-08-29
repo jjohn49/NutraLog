@@ -11,6 +11,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import models.FoodSearch
 import requests.FoodSearchRequest
 import response.FoodSearchResponse
 import response.LogInResponse
@@ -30,8 +31,18 @@ class FoodUtil {
     }
 
     suspend fun getFoodBySearch(req: FoodSearchRequest): FoodSearchResponse{
-        val uri : String = "${backend_url}/open-food/get/search/${req.query}"
-        val response: FoodSearchResponse = client.get(uri).body()
-        return response
+
+        val query = req.query.replace(' ','+')
+
+        val uri : String = "${backend_url}/open-food/get/search/${query}"
+        val response = client.get(uri)
+
+        return if(response.status.value in 200..299){
+            FoodSearchResponse(true,response.body(),"Got Food Searches for query: ${req.query}",null)
+        }else{
+            FoodSearchResponse(false,null,"Could not get Food Search for query: ${req.query}",null)
+        }
+
+
     }
 }

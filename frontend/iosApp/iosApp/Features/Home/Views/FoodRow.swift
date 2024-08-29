@@ -10,6 +10,7 @@ import SwiftUI
 import Shared
 
 struct FoodRow: View {
+    var index: Int = 0
     @Binding var foodServing: FoodServing
     @State var userNut: UserNutrients = UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0)
     @EnvironmentObject var user: User
@@ -36,13 +37,11 @@ struct FoodRow: View {
             
         }.onAppear(perform: {
             userNut = foodServing.toUserNutrients()
-        }).onDelete {
-            print("Delete \(foodServing.food.name)")
-        }
+        })
     }
 }
 
 #Preview {
     @State var foodServing: FoodServing = FoodServing(numberOfServings: 1, food: Food(id: "", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 1, brand: "Store Brand"))
-    return FoodRow(foodServing: $foodServing).environmentObject(User())
+    return FoodRow(index: 0,foodServing: $foodServing).environmentObject(User())
 }

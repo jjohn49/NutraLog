@@ -9,11 +9,16 @@ import java.util.*
 
 interface DayRepository : MongoRepository<Day, String> {
 
-    fun findAllByUserId(userId: String): List<Day>
+    fun findAllByUserId(userId: String): Optional<List<Day>>
 
-    fun findDayByDate(date: LocalDate): Day
+    fun existsByDateAndUserId(date: LocalDate, userId: String): Boolean
+    fun findByDateAndUserId(date: LocalDate, userId: String): Optional<Day>
 
-    fun findDayByDateAndUserId(date: LocalDate, userId: String): Day
+    fun findDayByDate(date: LocalDate): Optional<Day>
 
-    fun findDayByDateAndId(date: LocalDate, id: String): Day
+    fun findDayByDateAndUserId(date: LocalDate, userId: String): Optional<Day>
+
+    fun findDayByDateAndId(date: LocalDate, id: String): Optional<Day>
+
+    fun findDayByIdAndUserId(id: String, userId: String): Optional<Day>
 }

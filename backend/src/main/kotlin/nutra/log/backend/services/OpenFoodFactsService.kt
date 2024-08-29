@@ -8,6 +8,7 @@ import nutra.log.backend.models.OpenFoodFactSearch
 import nutra.log.backend.repositories.FoodRepository
 import nutra.log.backend.responses.FoodSearchResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.net.URI
@@ -44,15 +45,20 @@ class OpenFoodFactsService {
         return food
     }
 
-    fun getFoodBySearch(query: String):ResponseEntity<FoodSearchResponse>{
+    fun getFoodBySearch(query: String):ResponseEntity<FoodSearch>{
 
-        val uri = "https://world.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1"
+        val uri = "https://world.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1&sort_by=unique_scans_n&page_size=15"
+
         val response = sendRequestTo(uri)
-        val foodFacts = json.decodeFromString<OpenFoodFactSearch>(response.body())
 
-        val foods: FoodSearch = foodFacts.toFoodSearch()
-
-        return ResponseEntity.ok(FoodSearchResponse(true, foodFacts.toFoodSearch(), "Got Search Results", null))
+        return if(response.statusCode() in 200..299){
+            val foodFacts = json.decodeFromString<OpenFoodFactSearch>(response.body())
+            val foods: FoodSearch = foodFacts.toFoodSearch()
+            ResponseEntity.ok(foodFacts.toFoodSearch())
+        }else{
+            //forwarding the bad statuse code from OpenFoodFact API
+            ResponseEntity(HttpStatusCode.valueOf(response.statusCode()))
+        }
     }
 
     fun saveFood(food: Food){
