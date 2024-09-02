@@ -15,17 +15,24 @@ struct FoodListView: View {
     
     @Binding var day: Day
     
+    var showSwipeToDelete: Bool = true
+    
     var body: some View {
         
         LazyVStack{
             Text("Nurishment").bold().font(.title2)
             
-            
-            ForEach(Array($day.foodsEaten.enumerated()), id: \.offset){index, serving in
-                FoodRow(index: index, foodServing: serving, showFoodDetailAddButton: false).onDelete {
-                    Task{
-                        await user.deleteFoodServingForCurrentDay(index:index)
+            if(showSwipeToDelete){
+                ForEach(Array($day.foodsEaten.enumerated()), id: \.offset){index, serving in
+                    FoodRow(index: index, foodServing: serving, showFoodDetailAddButton: false).onDelete {
+                        Task{
+                            await user.deleteFoodServingForCurrentDay(index:index)
+                        }
                     }
+                }
+            }else{
+                ForEach(Array($day.foodsEaten.enumerated()), id: \.offset){index, serving in
+                    FoodRow(index: index, foodServing: serving, showFoodDetailAddButton: false)
                 }
             }
             

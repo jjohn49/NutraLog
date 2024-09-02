@@ -44,7 +44,12 @@ struct CalendarView: View {
                     navigate = true
                 }
                 .onAppear(perform: {
-                    startDate = user.dateFormatter.date(from: user.days[0].date.description())!
+                    
+                    //Error handling for if user has 0 days
+                    if let temp: Date = user.dateFormatter.date(from: user.days[0].date.description()) {
+                        startDate = temp
+                    }
+                    
                 })
             
                 

@@ -47,7 +47,7 @@ struct DayDetailView: View {
         }else{
             ScrollView{
                 MacroView(nutrients: $day.userNutrients, goals: $user.goals).padding(.horizontal)
-                FoodListView(day: $day).padding(.horizontal)
+                FoodListView(day: $day, showSwipeToDelete: false).padding(.horizontal)
             }
         }
         

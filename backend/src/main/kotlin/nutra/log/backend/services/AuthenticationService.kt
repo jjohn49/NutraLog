@@ -1,6 +1,7 @@
 package nutra.log.backend.services
 
 import nutra.log.backend.models.User
+import nutra.log.backend.models.UserGoal
 import nutra.log.backend.requests.LogInRequest
 import nutra.log.backend.requests.RegisterUserRequest
 import nutra.log.backend.responses.LogInResponse
@@ -54,7 +55,8 @@ class AuthenticationService {
     fun registerNewUser(registerUserRequest: RegisterUserRequest) : ResponseEntity<*>{
         val hashedPassword = passwordEncoder.encode(registerUserRequest.password)
 
-        val newUser = User(registerUserRequest.id, email = registerUserRequest.email, password = hashedPassword)
+        val basicGoal: UserGoal = UserGoal(2000,200,200,50)
+        val newUser = User(registerUserRequest.id, email = registerUserRequest.email, password = hashedPassword, userGoals = basicGoal)
 
         return userService.addUser(newUser)
     }
