@@ -57,6 +57,12 @@ import Shared
         }
     }
     
+    func sortDays(){
+        days.sort(by: { d1, d2 in
+            dateFormatter.date(from: d1.date.description())! < dateFormatter.date(from: d2.date.description())!
+        })
+    }
+    
     func set(response:LogInResponse) async throws-> Bool{
         if response.success{
             self.username = response.body!.user.email
@@ -64,6 +70,8 @@ import Shared
             self.goals = response.body!.user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
             self.authenticatedRequest = AuthenticatedRequest(token: response.body!.token)
             self.days = response.body!.user.days
+            
+            sortDays()
             
             if !wasDayCreatedAlready(date: Date.now) {
                 await createDayForToday()
@@ -93,6 +101,8 @@ import Shared
                 username = user.id
                 goals = user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
                 days = user.days
+                
+                sortDays()
                 self.updateUserNutrients()
             }
         }

@@ -15,6 +15,7 @@ struct CalendarView: View {
     @State private var selectDate: Date? = Date()
     @State var day: Day? = nil
     @State private var navigate = false
+    @State var startDate: Date = Date.now
 
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -32,17 +33,20 @@ struct CalendarView: View {
                     .daysVerticalSpacing(20)
                     .monthsBottomPadding(20)
                     .monthsTopPadding(40)
-                    .startMonth(Calendar.current.date(byAdding: .year, value: -1, to: Date.now)!)
+                    .startMonth(startDate)
                     .endMonth(Date.now)
                     .dayView { currentDate, isCurrentMonth, selectedDate, selectedRange -> СustomDayView in
                         return СustomDayView(date: currentDate, day: user.getDay(date: currentDate), isCurrentMonth: isCurrentMonth, selectedDate: selectedDate, selectedRange: selectedRange)
                     }
                         
                 }.padding(.horizontal)
-                    .onChange(of: selectDate!) {newValue in
-                        
-                        navigate = true
-                    }
+                .onChange(of: selectDate!) {newValue in
+                    navigate = true
+                }
+                .onAppear(perform: {
+                    startDate = user.dateFormatter.date(from: user.days[0].date.description())!
+                })
+            
                 
                 NavigationLink(isActive: $navigate) {
                     DayDetailView(date: $selectDate).navigationTitle(dateFormatter.string(from: selectDate!)).onAppear(perform: {
