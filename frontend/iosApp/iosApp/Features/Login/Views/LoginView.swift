@@ -77,7 +77,7 @@ struct LoginView: View {
             //print(response)
             if(try await user.set(response: response)){
                 if(user.getDay(date: Date.now) == nil){
-                    try await user.createDayForToday()
+                    await user.createDayForToday()
                 }
                 day = user.getDay(date: Date.now)!
                 user.currentDay = day

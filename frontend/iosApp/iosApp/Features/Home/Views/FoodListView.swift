@@ -13,13 +13,15 @@ struct FoodListView: View {
     
     @EnvironmentObject var user: User
     
+    @Binding var day: Day
+    
     var body: some View {
         
         LazyVStack{
-            Text("Today's Food").bold().font(.title2)
+            Text("Nurishment").bold().font(.title2)
             
             
-            ForEach(Array($user.currentDay.foodsEaten.enumerated()), id: \.offset){index, serving in
+            ForEach(Array($day.foodsEaten.enumerated()), id: \.offset){index, serving in
                 FoodRow(index: index, foodServing: serving, showFoodDetailAddButton: false).onDelete {
                     Task{
                         await user.deleteFoodServingForCurrentDay(index:index)
@@ -37,7 +39,7 @@ struct FoodListView: View {
 
 #Preview {
     
-    var user: User = User()
+    @State var user: User = User()
     
     var food: Food = Food(id: "Chicken", name: "Chicken", servingSize: "1 Breast", calories: 100, proteinGrams: 20, carbGrams: 1, fatGrams: 1, brand: "Store")
     
@@ -50,5 +52,5 @@ struct FoodListView: View {
     
     user.currentDay = Day(id: "", userId: "", date: user.dateToKotlinDate(date: Date.now), foodsEaten: foodsEaten, userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
     
-    return FoodListView().environmentObject(user)
+    return FoodListView(day: $user.currentDay).environmentObject(user)
 }

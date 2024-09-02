@@ -96,7 +96,7 @@ class DayUtil {
         return if (response.status.value in 200..299) {
             GetDayResponse(true,response.body(),"Got day",null)
         }else{
-            GetDayResponse(false,null,"Failed to get day",null)
+            GetDayResponse(false,null,"Failed to get day.  Failed with exit code ${response.status}. \nFull Response: \n\n\n${response}",null)
         }
     }
 

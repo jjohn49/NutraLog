@@ -10,18 +10,21 @@ import SwiftUI
 import Shared
 
 struct MacroView: View {
-    @EnvironmentObject var user:User
+    
+    
+    @Binding var nutrients: UserNutrients
+    @Binding var goals: UserGoal
     
     var body: some View {
         
             VStack{
-                MacroTextView(text: "Calories", macro: $user.nutrients.calories, macroGoal: $user.goals.calories, color: .red).padding()
+                MacroTextView(text: "Calories", macro: $nutrients.calories, macroGoal: $goals.calories, color: .red).padding()
                 
-                MacroTextView(text: "Protein", macro: $user.nutrients.proteinGrams, macroGoal: $user.goals.proteinGrams, color: .blue).padding()
+                MacroTextView(text: "Protein", macro: $nutrients.proteinGrams, macroGoal: $goals.proteinGrams, color: .blue).padding()
                 
-                MacroTextView(text: "Carbs", macro: $user.nutrients.carbGrams, macroGoal: $user.goals.carbGrams, color: .green).padding()
+                MacroTextView(text: "Carbs", macro: $nutrients.carbGrams, macroGoal: $goals.carbGrams, color: .green).padding()
                 
-                MacroTextView(text: "Fat", macro: $user.nutrients.fatGrams, macroGoal: $user.goals.fatGrams, color: .yellow).padding()
+                MacroTextView(text: "Fat", macro: $nutrients.fatGrams, macroGoal: $goals.fatGrams, color: .yellow).padding()
                 
             }
         }
@@ -29,5 +32,7 @@ struct MacroView: View {
 
 
 #Preview {
-    return MacroView().environmentObject(User())
+    @State var user = User()
+    
+    return MacroView(nutrients: $user.nutrients, goals: $user.goals)
 }

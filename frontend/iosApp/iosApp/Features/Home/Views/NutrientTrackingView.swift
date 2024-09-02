@@ -23,8 +23,8 @@ struct NutrientTrackingView: View {
             
             NavigationStack{
                 ScrollView{
-                    MacroView().padding()
-                    FoodListView()
+                    MacroView(nutrients: $user.nutrients, goals: $user.goals).padding()
+                    FoodListView(day: $user.currentDay)
                 }.navigationTitle("Today").toolbar{
                     ToolbarItem{
                         Menu(content: {

@@ -36,5 +36,5 @@ struct TargetView: View {
 #Preview {
     @State var nuts: UserNutrients = UserNutrients(calories: 500,proteinGrams: 0,carbGrams: 0,fatGrams: 0)
     @State var goals: UserGoal = UserGoal(calories: 2000,proteinGrams: 200,carbGrams: 200,fatGrams: 100)
-    return TargetView(userNutrients: $nuts,userGoals: $goals)
+    return TargetView(userNutrients: $nuts,userGoals: $goals, width: 50)
 }

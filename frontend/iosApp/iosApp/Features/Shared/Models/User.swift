@@ -109,29 +109,29 @@ import Shared
     
     //Compares a Kotlin LocalDate to a Swift Date and returns true of they are the same date
     func compareKotlinDateVsSwiftDate(kotlin: Kotlinx_datetimeLocalDate, swift : Date) -> Bool{
-        return self.dateFormatter.string(from: swift) == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
+        return self.dateFormatter.string(from: swift) == kotlin.description()
     }
     
     
     //Need to use yyyy-MM-dd format
     func wasDayCreatedAlready(dayStr: String) -> Bool{
         return days.contains(where: {day in
-            let kotlin = day.date
             
-            return dayStr == "\(kotlin.year)-\(kotlin.monthNumber < 10 ? "0"+kotlin.monthNumber.formatted() : kotlin.monthNumber.formatted())-\(kotlin.dayOfMonth)"
+            return day.date.description() == dayStr
+            
+            
         } )
     }
     
     func createDayForDate(date: Date) async {
         if !self.wasDayCreatedAlready(date: date) {
-            
             do{
                 let response = try await self.addDay(date: date)
                 if(response.success){
                     days.append(response.body!)
                 }else{
                     print("RESPONSE TO CREATING A DAY FAILED")
-                    print(response.message)
+                    print(response)
                 }
             } catch {
                 print("Error adding a day")
@@ -156,6 +156,7 @@ import Shared
             print("Error getting a response from: pullUser method")
         }
         
+
         return response
     }
     
