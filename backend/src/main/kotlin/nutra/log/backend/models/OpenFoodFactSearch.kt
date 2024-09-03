@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OpenFoodFactSearch(
     val count: Int?,
-    val page: Int,
-    val page_count: Int,
+    val page: Int?,
+    val page_count: Int?,
     val page_size:Int,
     val products: List<SearchProduct>,
 ){

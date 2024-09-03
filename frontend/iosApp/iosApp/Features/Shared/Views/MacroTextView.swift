@@ -18,8 +18,8 @@ struct MacroTextView: View {
     var body: some View {
         
         ProgressView(value: macro / Double(macroGoal), label: {
-            Text("\(text): \(String(format:"%.1f",macro)) : \(String(format:"%.0f",macroGoal))").bold().foregroundStyle(color).font(.title)
-        })
+            Text("\(text): \(String(format:"%.1f",macro)) : \(macroGoal)").bold().foregroundStyle(color).font(.title)
+        }).tint(color)
         
     }
 }

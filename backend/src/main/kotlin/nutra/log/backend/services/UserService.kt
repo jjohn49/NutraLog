@@ -2,7 +2,9 @@ package nutra.log.backend.services
 
 import nutra.log.backend.models.Day
 import nutra.log.backend.models.User
+import nutra.log.backend.models.UserGoal
 import nutra.log.backend.repositories.UserRepository
+import nutra.log.backend.requests.SetUserGoalsRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
@@ -49,5 +51,18 @@ class UserService(@Autowired val repo: UserRepository) {
             return ResponseEntity.notFound().build()
         }
 
+    }
+
+    fun setUserGoals(authentication: Authentication, req: SetUserGoalsRequest): ResponseEntity<UserGoal>{
+        return try{
+            val user: User = repo.findById(authentication.name).orElseThrow()
+            user.userGoals = req.userGoal
+            repo.save(user)
+            ResponseEntity.ok(user.userGoals)
+        }catch (e: NoSuchElementException){
+            ResponseEntity.notFound().build()
+        }catch (e: Exception){
+            ResponseEntity.badRequest().build()
+        }
     }
 }

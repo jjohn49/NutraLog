@@ -32,6 +32,9 @@ struct HomePageView: View {
                 CalendarView().tabItem {
                     Text("Calendar")
                 }
+                SettingsView().tabItem {
+                    Text("Settings")
+                }
                 
             }
         }

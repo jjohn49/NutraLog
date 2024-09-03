@@ -28,11 +28,13 @@ struct LoginView: View {
                 Text("Incorrect Username or Password.  try Again").bold().background(.red)
             }
             
+            //TODO: Maybe add a Logo or some art here
+            
             Spacer()
             
             VStack {
                 TextField(
-                    "user.username",
+                    "Username",
                     text: $viewModel.username
                 )
                 .autocapitalization(.none)
@@ -42,7 +44,7 @@ struct LoginView: View {
                 Divider()
                 
                 SecureField(
-                    "Login.PasswordField.Title",
+                    "Password",
                     text: $viewModel.password
                 )
                 .padding(.top, 20)
@@ -58,7 +60,7 @@ struct LoginView: View {
                     logInButtonAction()
                 },
                 label: {
-                    Text("Login.LoginButton.Title")
+                    Text("Sign In")
                         .font(.system(size: 24, weight: .bold, design: .default))
                         .frame(maxWidth: .infinity, maxHeight: 60)
                         .foregroundColor(Color.white)
@@ -71,6 +73,7 @@ struct LoginView: View {
     }
     
     func logInButtonAction() {
+        //TODO: Save Token and User Credentials in User Defaults So you don't have to sign in all the time
         loading = true
         Task{
             let response = await viewModel.login()

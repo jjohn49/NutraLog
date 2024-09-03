@@ -220,6 +220,19 @@ import Shared
         return DayUtil.companion.createLocalDate(dateStr: dateFormatter.string(from: date))
     }
     
+    func setUserGoal(userGoal:UserGoal) async -> SetUserGoalResponse{
+        self.goals = userGoal
+        
+        do{
+            let response = try await userUtil.setUserGoal(authenticatedRequest: authenticatedRequest, req: SetUserGoalsRequest(userGoal: userGoal))
+            return response
+        }catch {
+            print("Error sending User Goal to the backend")
+        }
+        
+        return SetUserGoalResponse(success: false, userGoal: nil, message: "Error Sending UserGoal to the Backend")
+    }
+    
     
  
 }
