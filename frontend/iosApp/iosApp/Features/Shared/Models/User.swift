@@ -18,14 +18,9 @@ import Shared
     @Published var currentDay: Day
     @Published var authenticatedRequest : AuthenticatedRequest = AuthenticatedRequest(token: "")
     
-    
-    //Local Room Database for Offline Usage
-    let localRepo: AppDatabase
-    
-    let dayUtil: DayUtil
-    let userUtil: UserUtil
-    
     let dateFormatter = DateFormatter()
+    
+    let service: Service
     
     init() {
         self.username = ""
@@ -38,9 +33,7 @@ import Shared
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        localRepo = DBBuilder().build()
-        dayUtil = DayUtil(dayDao: localRepo.getDayDao())
-        userUtil = UserUtil(userKMMDao: localRepo.getUserDao())
+        service = Service(database: DBBuilder().build())
     }
     
     func addFoodServingToCurrentDay(foodServing: FoodServing) async {
@@ -48,7 +41,7 @@ import Shared
         self.updateUserNutrients()
         
         do{
-            try await dayUtil.addFoodToDay(auth: authenticatedRequest, req: AddFoodToDayRequest(date: currentDay.date, foodServing: foodServing))
+            try await service.addFoodToDay(authenticatedRequest: authenticatedRequest, addFoodToDayRequest: AddFoodToDayRequest(date: currentDay.date, foodServing: foodServing))
         }catch {
             print("Error sending to the backend")
         }
@@ -59,7 +52,7 @@ import Shared
         self.updateUserNutrients()
         
         do{
-            try await dayUtil.deleteFoodFromDay(auth: authenticatedRequest, req: DeleteFoodFromDayRequest(dayId: currentDay.id, foodServing: foodToDelete))
+            try await service.deleteFoodFromDay(authenticatedRequest: authenticatedRequest, deleteFoodFromDayRequest: DeleteFoodFromDayRequest(dayId: currentDay.id, foodServing: foodToDelete))
         }catch {
             print("Error trying to delete \(foodToDelete.food.name) from current day \(currentDay.date)")
         }
@@ -169,7 +162,7 @@ import Shared
         var response: UserResponse = UserResponse(success: false, user: nil, message: "Failed getting response")
         
         do{
-            response = try await userUtil.getUser(token: token)
+            response = try await service.getUser(token: token)
         } catch {
             print("Error getting a response from: pullUser method")
         }
@@ -179,7 +172,7 @@ import Shared
     }
     
     func getAllDays() async throws -> GetAllDaysResponse{
-        return try await dayUtil.getDaysForUser(req: authenticatedRequest)
+        return try await service.getDaysForUser(authenticatedRequest: authenticatedRequest)
     }
     
     func pullDays() async {
@@ -194,7 +187,7 @@ import Shared
     
     func addDay(dateStr: String) async -> GetDayResponse {
         do{
-            let response = try await dayUtil.CreateDay(auth: authenticatedRequest, req: CreateDayRequest(date: DayUtil.companion.createLocalDate(dateStr: dateStr)))
+            let response = try await service.createDay(authenticatedRequest: authenticatedRequest, createDayRequest: CreateDayRequest(date: DayUtil.companion.createLocalDate(dateStr: dateStr)))
             
             await self.refresh()
             return response
@@ -211,7 +204,7 @@ import Shared
     }
     
     func getDayOnline(date: String) async throws -> GetDayResponse {
-        return try await dayUtil.getDayForUser(auth: authenticatedRequest, date: date)
+        return try await service.getDayForUser(authenticatedRequest: authenticatedRequest, date: date)
     }
     
     func getDayOnline(date: Date) async throws -> GetDayResponse{
@@ -232,7 +225,7 @@ import Shared
         self.goals = userGoal
         
         do{
-            let response = try await userUtil.setUserGoal(authenticatedRequest: authenticatedRequest, req: SetUserGoalsRequest(userGoal: userGoal))
+            let response = try await service.setUserGoal(authenticatedRequest: authenticatedRequest, setUserGoalsRequest: SetUserGoalsRequest(userGoal: userGoal))
             return response
         }catch {
             print("Error sending User Goal to the backend")

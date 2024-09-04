@@ -28,12 +28,6 @@ import response.UserResponse
 
 class UserUtil {
 
-    constructor(userKMMDao: UserKMMDao){
-        this.dao = userKMMDao
-    }
-
-    val dao: UserKMMDao
-
     private val backend_url = BuildKonfig.BACKEND_URL
 
     val client = HttpClient {
@@ -73,7 +67,6 @@ class UserUtil {
             println(response.body())
             SetUserGoalResponse(true, response.body(),"Got User Goal")
         }else{
-            println()
             SetUserGoalResponse(false,null,"Error When trying to set User Goal. Received Code: ${response.status}\nFull Error:\n\n${response}")
         }
     }
