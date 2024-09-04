@@ -1,5 +1,7 @@
 package models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format
@@ -7,8 +9,9 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Entity
 data class Day(
-    val id: String = "",
+    @PrimaryKey(autoGenerate = false) val id: String = "",
     val userId: String = "",
     val date: LocalDate = Clock.System.now().toLocalDateTime(kotlinx.datetime.TimeZone.currentSystemDefault()).date,
     var foodsEaten: List<FoodServing> = mutableListOf(),

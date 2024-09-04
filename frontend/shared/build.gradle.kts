@@ -9,6 +9,9 @@ plugins {
     kotlin("plugin.serialization") version "1.9.23"
 
     id("com.codingfeline.buildkonfig") version "0.15.1"
+
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -28,6 +31,8 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+            // Required when using NativeSQLiteDriver
+            //linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -41,6 +46,13 @@ kotlin {
             implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+
+
+
 
         }
 
@@ -77,6 +89,17 @@ buildkonfig {
     defaultConfigs {
         buildConfigField(STRING, "BACKEND_URL", backend_url)
     }
+}
+
+room{
+    schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
 }
 
 

@@ -1,5 +1,6 @@
 package utils
 
+import Database.daos.DayDao
 import frontend.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -28,6 +29,12 @@ import response.GetDayResponse
 import response.GetAllDaysResponse
 
 class DayUtil {
+
+    constructor(dayDao: DayDao){
+        this.dao = dayDao
+    }
+
+    val dao: DayDao
 
     private val backend_url = BuildKonfig.BACKEND_URL
 

@@ -18,8 +18,12 @@ import Shared
     @Published var currentDay: Day
     @Published var authenticatedRequest : AuthenticatedRequest = AuthenticatedRequest(token: "")
     
-    let dayUtil: DayUtil = DayUtil()
-    let userUtil: UserUtil = UserUtil()
+    
+    //Local Room Database for Offline Usage
+    let localRepo: AppDatabase
+    
+    let dayUtil: DayUtil
+    let userUtil: UserUtil
     
     let dateFormatter = DateFormatter()
     
@@ -33,6 +37,10 @@ import Shared
         self.currentDay = Day(id: "", userId: "", date: .init(year: 1, monthNumber: 1, dayOfMonth: 1), foodsEaten: [], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        localRepo = DBBuilder().build()
+        dayUtil = DayUtil(dayDao: localRepo.getDayDao())
+        userUtil = UserUtil(userKMMDao: localRepo.getUserDao())
     }
     
     func addFoodServingToCurrentDay(foodServing: FoodServing) async {

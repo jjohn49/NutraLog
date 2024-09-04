@@ -1,5 +1,6 @@
 package utils
 
+import Database.daos.UserKMMDao
 import frontend.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -26,6 +27,12 @@ import response.SetUserGoalResponse
 import response.UserResponse
 
 class UserUtil {
+
+    constructor(userKMMDao: UserKMMDao){
+        this.dao = userKMMDao
+    }
+
+    val dao: UserKMMDao
 
     private val backend_url = BuildKonfig.BACKEND_URL
 

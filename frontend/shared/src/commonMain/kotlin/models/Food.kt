@@ -1,10 +1,13 @@
 package models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Entity
 data class Food(
-    var id: String,
+    @PrimaryKey(autoGenerate = false) var id: String,
     var name: String,
     var servingSize: String,
     var calories: Double?,
