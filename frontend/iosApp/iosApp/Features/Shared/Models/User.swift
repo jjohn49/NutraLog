@@ -30,10 +30,10 @@ import Shared
         self.days = []
         self.authenticatedRequest = AuthenticatedRequest(token: "")
         self.currentDay = Day(id: "", userId: "", date: .init(year: 1, monthNumber: 1, dayOfMonth: 1), foodsEaten: [], userNutrients: UserNutrients(calories: 0, proteinGrams: 0, carbGrams: 0, fatGrams: 0))
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        self.dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        self.dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        service = Service(database: DBBuilder().build())
+        self.service = Service(database: DBBuilder().build())
     }
     
     func addFoodServingToCurrentDay(foodServing: FoodServing) async {
@@ -82,6 +82,8 @@ import Shared
             
             
             self.updateUserNutrients()
+            
+            try await service.userKMMDao.insert(item: response.body!.user)
             
             return true
         }
@@ -199,7 +201,6 @@ import Shared
     }
     
     func addDay(date: Date) async throws -> GetDayResponse{
-        print(dateFormatter.string(from: date))
         return await addDay(dateStr: dateFormatter.string(from: date))
     }
     
