@@ -36,6 +36,16 @@ import Shared
         self.service = Service(database: DBBuilder().build())
     }
     
+    func getUserFromLocalRepo() async -> LogInResponse{
+        do{
+            let response: LogInResponse = try await service.getUserFromLocal()
+            
+            return response
+        }catch {
+            return LogInResponse(success: false, body: nil, message: "ERROR: Something went wrong when retreiving from the local repo", request: nil)
+        }
+    }
+    
     func addFoodServingToCurrentDay(foodServing: FoodServing) async {
         currentDay.foodsEaten.append(foodServing)
         self.updateUserNutrients()
@@ -83,7 +93,8 @@ import Shared
             
             self.updateUserNutrients()
             
-            try await service.userKMMDao.insert(item: response.body!.user)
+            try await service.getUserFromBackend(logInResponse: response)
+            
             
             return true
         }
@@ -210,6 +221,14 @@ import Shared
     
     func getDayOnline(date: Date) async throws -> GetDayResponse{
         return try await getDayOnline(date: dateFormatter.string(from: date))
+    }
+    
+    func wipeLocalDB() async {
+        do{
+            try await service.deleteEverythingFromLocalDB()
+        }catch {
+            print("Couldn't Delete Everything")
+        }
     }
     
     func getDay(date: Date) -> Day?{

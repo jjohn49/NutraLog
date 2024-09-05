@@ -2,15 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "97f3b7ea8bf46d62f0bc1b015790d307",
+    "identityHash": "6676c5011da5fc6079062f1b901e8088",
     "entities": [
       {
         "tableName": "UserKMM",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `userGoals` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `token` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `userGoals` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "token",
+            "columnName": "token",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -140,7 +146,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '97f3b7ea8bf46d62f0bc1b015790d307')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6676c5011da5fc6079062f1b901e8088')"
     ]
   }
 }

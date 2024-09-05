@@ -20,7 +20,7 @@ interface DayDao {
     suspend fun update(item: Day)
 
     @Query("SELECT * FROM DAY WHERE date = :date")
-    suspend fun getDayForDate(date: String)
+    suspend fun getDayForDate(date: String): Day
 
     @Query("SELECT count(*) FROM Day")
     suspend fun count(): Int
@@ -29,5 +29,11 @@ interface DayDao {
     fun getAllAsFlow(): Flow<List<Day>>
 
     @Query("SELECT * FROM Day WHERE userId = :userID")
-    suspend fun getDaysForUser(userID: String)
+    suspend fun getDaysForUser(userID: String): List<Day>
+
+    @Query("SELECT COUNT() FROM Day WHERE id = :id")
+    suspend fun numOfDaysWithId(id: String): Int
+
+    @Query("DELETE FROM DAY")
+    suspend fun deleteFuckingEverything()
 }

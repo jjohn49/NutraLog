@@ -17,4 +17,10 @@ interface FoodDao {
 
     @Query("SELECT * FROM Food")
     fun getAllAsFlow(): Flow<List<Food>>
+
+    @Query("SELECT COUNT() FROM Food WHERE id = :id")
+    suspend fun numOfFoodsWithId(id: String): Int
+
+    @Query("DELETE FROM Food")
+    suspend fun deleteFuckingEverything()
 }

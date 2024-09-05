@@ -2,6 +2,7 @@ package Database
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,10 @@ actual class DBBuilder {
         val dbFilePath = documentDirectory() + "/my_room.db"
         return Room.databaseBuilder<AppDatabase>(
             name = dbFilePath,
-        ).setDriver(BundledSQLiteDriver()).setQueryCoroutineContext(Dispatchers.IO)
+        )
+            .setDriver(BundledSQLiteDriver())
+            .setQueryCoroutineContext(Dispatchers.IO)
+            .fallbackToDestructiveMigrationOnDowngrade(true)
     }
 
     @OptIn(ExperimentalForeignApi::class)
