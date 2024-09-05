@@ -18,6 +18,7 @@ actual class DBBuilder {
 
     fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
         val dbFilePath = documentDirectory() + "/my_room.db"
+        //println(dbFilePath)
         return Room.databaseBuilder<AppDatabase>(
             name = dbFilePath,
         )

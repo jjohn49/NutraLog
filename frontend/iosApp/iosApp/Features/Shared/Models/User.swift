@@ -75,7 +75,7 @@ import Shared
     }
     
     func set(response:LogInResponse) async throws-> Bool{
-        if response.success{
+        if response.success && response.body?.token != "" {
             self.username = response.body!.user.email
             self.token = response.body!.token
             self.goals = response.body!.user.userGoals ?? UserGoal(calories: 2000, proteinGrams: 200, carbGrams: 200, fatGrams: 100)
@@ -216,6 +216,7 @@ import Shared
     }
     
     func getDayOnline(date: String) async throws -> GetDayResponse {
+        //print(authenticatedRequest)
         return try await service.getDayForUser(authenticatedRequest: authenticatedRequest, date: date)
     }
     

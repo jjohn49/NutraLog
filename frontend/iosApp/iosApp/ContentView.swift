@@ -10,11 +10,9 @@ struct ContentView: View {
             Task{
                 
                 //This is just for testing
-                await user.wipeLocalDB()
+//                await user.wipeLocalDB()
                 
                 let response = await user.getUserFromLocalRepo()
-                
-                print(response)
                 
                 let _ = try await user.set(response: response)
             }

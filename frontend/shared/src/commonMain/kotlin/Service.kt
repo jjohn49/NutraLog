@@ -49,8 +49,11 @@ class Service(
     )
 
     suspend fun getUserFromBackend(logInResponse: LogInResponse){
+
+        println(logInResponse)
         logInResponse.body?.let { lb ->
 
+            lb.user.token = lb.token
             if(userKMMDao.numOfUsersWithId(lb.user.id) > 0){
                 userKMMDao.update(lb.user)
             }else {
@@ -74,6 +77,9 @@ class Service(
                 }
             }
         }
+
+        //println(userKMMDao.getUserAndDays())
+        //println(foodDao.count())
     }
 
     suspend fun getUserFromLocal(): LogInResponse{
@@ -83,7 +89,7 @@ class Service(
             val user = userAndDays.first().userKMM
             user.days = userAndDays.first().days
 
-            return LogInResponse(true, LogInBody("",user),"Received User from local DB",null)
+            return LogInResponse(true, LogInBody(user.token,user),"Received User from local DB",null)
         }
 
         return LogInResponse(false,null,"No User in Local DB", null)
@@ -133,7 +139,20 @@ class Service(
     }
 
     suspend fun getDayForUser(authenticatedRequest: AuthenticatedRequest, date: String): GetDayResponse{
-        return dayUtil.getDayForUser(authenticatedRequest,date)
+        val response = dayUtil.getDayForUser(authenticatedRequest,date)
+
+        if(response.success){
+            response.body?.let {d ->
+                if(dayDao.numOfDaysWithId(d.id)> 0){
+                    dayDao.update(d)
+                }else{
+                    dayDao.insert(d)
+                }
+            }
+        }
+
+        return response
+
     }
 
     suspend fun createDay(authenticatedRequest: AuthenticatedRequest, createDayRequest: CreateDayRequest): GetDayResponse{
